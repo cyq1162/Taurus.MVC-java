@@ -109,6 +109,7 @@ public class MvcFilter {
 		
      }
 	static void initConfig(HttpContext context) {
+		context.log("Taurus.MVC Start : ");
 		Enumeration<String> configs=context.getInitParameterNames();
 		 while (configs.hasMoreElements()) {
 			 String name=configs.nextElement();
@@ -122,6 +123,6 @@ public class MvcFilter {
 				 MicroServiceConfig.init(nameLower, context.getInitParameter(name));
 			 }
 			 context.log(name+" : "+context.getInitParameter(name));
-		}		
+		}
 	}
 }
