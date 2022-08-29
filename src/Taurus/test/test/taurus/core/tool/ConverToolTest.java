@@ -6,8 +6,7 @@ import java.util.Date;
 import java.util.UUID;
 
 import org.junit.Test;
-
-import taurus.core.tool.ConvertTool;
+import taurus.mvc.tool.ConvertTool;
 
 
 
@@ -26,7 +25,8 @@ public class ConverToolTest {
 		float f=0;
 		double d=0;
 		try {
-			//int
+			Integer isZero= ConvertTool.tryChangeType(null,Integer.class);
+			assertEquals(0, isZero.intValue());
 			i=(int)ConvertTool.changeType("dfdf", int.class);
 			assertEquals(0, i);
 			i=(Integer)ConvertTool.changeType("13.3.3", int.class);
