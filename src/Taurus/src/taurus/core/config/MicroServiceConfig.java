@@ -1,6 +1,10 @@
 package taurus.core.config;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import taurus.core.tool.ConvertTool;
+import taurus.core.tool.string;
 
 /**
  * 读写Taurus.Mvc 微服务应用中心可用的配置类库。
@@ -10,76 +14,67 @@ import taurus.core.tool.ConvertTool;
  */
 public class MicroServiceConfig {
 
+	private static Map<String, String> keyValue=new HashMap<String, String>();
 	/**
 	 * 可以对配置项设置初始值
 	 * @param name 配置项名称
 	 * @param value 值
 	 */
-	public static void init(String name, String value) {
-		try {
-		switch (name.toLowerCase()) {
-		case "microservice.client.key":
-			_ClientKey = value;
-			break;
-		case "microservice.client.name":
-			_ClientName = value;
-			break;
-		case "microservice.client.regurl":
-			_ClientRegUrl = value;
-			break;
-		case "microservice.client.version":
-			_ClientVersion = (int)ConvertTool.changeType(value, int.class);;
-			break;
-		case "microservice.app.runurl":
-			_AppRunUrl = value;
-			break;
-		default:
-			break;
-		}
-		} catch (Exception e) {
-			
+	public static void set(String name, String value) {
+		if(!string.IsNullOrEmpty(name) && !string.IsNullOrEmpty(value))
+		{
+			keyValue.put(name.toLowerCase(), value);
 		}
 	}
-	private static String _ClientKey="Taurus.MicroService";
+	public static void init(String name,String value) {
+		name=name.toLowerCase();
+		if(!keyValue.containsKey(name))
+		{
+			keyValue.put(name, value);
+		}
+	}
+
 	/**
 	 * 微服务间调用密钥串【任意字符串，由注册中心统一给出】
 	 * @return
 	 */
 	
 	public static String getClientKey() {
-		return _ClientKey;
+		String key=keyValue.get(Const.MicroServiceClientKey);
+		if(key==null){return "Taurus.MicroService";}
+		return key;
 	}
-	private static String _ClientName="";
+
 	/**
 	 * 客户端模块名称，多个可以用“,”逗号分隔。
 	 * 【示例：test 或绑定的域名：www.a.com】
 	 * @return
 	 */
 	public static String getClientName() {
-		return _ClientName;
+		return keyValue.get(Const.MicroServiceClientName);
 	}
-	private static String _ClientRegUrl="";
+
 	/**
 	 * 注册中心的WebUrl
 	 * @return
 	 */
 	public static String getClientRegUrl() {
-		return _ClientRegUrl;
+		return keyValue.get(Const.MicroServiceClientRegUrl);
 	}
-	private static int _ClientVersion=0;
+
 	/**
 	 * 客户端模块版本号（用于版本间升级）【示例：1】
 	 * @return
 	 */
 	public static int getClientVersion() {
-		return _ClientVersion;
+		return ConvertTool.tryChangeType(keyValue.get(Const.MicroServiceClientVersion),int.class);
 	}
-	private static String _AppRunUrl="";
+
 	/**
 	 * 当前Web程序运行时对外可访问的WebUrl【微服务初始启动会发送此WEbUrl注册地址】
 	 * @return
 	 */
 	public static String getAppRunUrl() {
-		return _AppRunUrl;
+		return keyValue.get(Const.MicroServiceAppRunUrl);
 	}
 }

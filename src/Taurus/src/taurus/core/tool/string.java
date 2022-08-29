@@ -3,7 +3,7 @@ package taurus.core.tool;
 public class string {
 
 	public static Boolean IsNullOrEmpty(String value) {
-		return value==null || value.length()==0;
+		return value==null || value.trim().length()==0;
 	}
 	public static String Format(String format,String arg0) {
 		if(!IsNullOrEmpty(format))

@@ -116,11 +116,11 @@ public class MvcFilter {
 			 String nameLower=name.toLowerCase();
 			 if(nameLower.startsWith("mvc."))
 			 {
-				 MvcConfig.init(nameLower, context.getInitParameter(name));
+				 MvcConfig.set(nameLower, context.getInitParameter(name));
 			 }
 			 else if(nameLower.startsWith("microservice."))
 			 {
-				 MicroServiceConfig.init(nameLower, context.getInitParameter(name));
+				 MicroServiceConfig.set(nameLower, context.getInitParameter(name));
 			 }
 			 context.log(name+" : "+context.getInitParameter(name));
 		}

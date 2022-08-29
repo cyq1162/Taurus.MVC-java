@@ -12,6 +12,7 @@ import taurus.core.entity.AnnotationInfo;
 import taurus.core.entity.MethodInfo;
 import taurus.core.entity.RequireInfo;
 import taurus.core.http.HttpInputStream;
+import taurus.core.http.HttpPart;
 import taurus.core.http.HttpRequest;
 import taurus.core.http.HttpResponse;
 import taurus.core.reflect.ControllerCollector;
@@ -282,7 +283,12 @@ public abstract class Controller {
 				Parameter parameter = parameters[i];
 				String name = parameter.getName();
 				String value = query(name);
-				callParas[i] = ConvertTool.changeType(value, parameter.getType());
+				Class<?> type = parameter.getType();
+				if (HttpPart.class.equals(type)) {
+					callParas[i] = request.getPart(name);
+				} else {
+					callParas[i] = ConvertTool.changeType(value, type);
+				}
 			}
 
 		} else {
@@ -514,13 +520,7 @@ public abstract class Controller {
 
 	public <T> T query(String key,Class<T> object)
     {
-    	
-    	try {
-        	return object.cast(ConvertTool.changeType(query(key), object));
-		} catch (Exception e) {
-			
-		}
-    	return null;
+    	return ConvertTool.tryChangeType(query(key), object);
     }
     
 

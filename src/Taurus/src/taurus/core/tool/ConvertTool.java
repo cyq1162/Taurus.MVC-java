@@ -8,6 +8,14 @@ import java.util.UUID;
 
 public class ConvertTool {
 
+	private static String checkIsEnum(Object value,String strValue)
+	{
+		if(value!=null && value.getClass().isEnum())
+		{
+			return ((Enum<?>)value).ordinal()+"";
+		}
+		return strValue;
+	}
 	private static String format(String value) {
 		if (value.indexOf('.') > -1)// 11.22
 		{
@@ -146,19 +154,6 @@ public class ConvertTool {
 			return 0;
 		}
 		return Integer.parseInt(format(strValue));
-		// if (double.class.equals(t) || Double.class.equals(t)) {
-		// return Double.parseDouble(value);
-		// } else if (int.class.equals(t) || Integer.class.equals(t)) {
-		//
-		// } else if (float.class.equals(t) || Float.class.equals(t)) {
-		// return Float.parseFloat(value);
-		//
-		// } else if (Number.class.isAssignableFrom(t)) {
-		// return t.getConstructor(String.class).newInstance(value);
-		// } else {
-		// return t.getConstructor(String.class).newInstance(value);
-		// }
-
 	}
 
 	private static Short toShort(String strValue, Class<?> t) {
@@ -188,7 +183,16 @@ public class ConvertTool {
 		}
 		return Double.parseDouble(strValue);
 	}
-
+	
+	@SuppressWarnings("unchecked")
+	public static <T> T tryChangeType(Object value, Class<T> t)
+	{
+		try {
+			return (T)changeType(value, t);
+		} catch (Exception e) {
+			return null;
+		}
+	}
 	public static Object changeType(Object value, Class<?> t) throws Exception {
 		if (t == null) {
 			return null;
@@ -204,11 +208,11 @@ public class ConvertTool {
 			return toEnum(strValue, t);
 		}
 		if (int.class.equals(t) || Integer.class.equals(t)) {
-			return toInt(strValue, t);
+			return toInt(checkIsEnum(value,strValue), t);
 		}
 		
 		if (Boolean.class.equals(t) || boolean.class.equals(t)) {
-			return toBoolean(strValue, t);
+			return toBoolean(checkIsEnum(value,strValue), t);
 		}
 		
 		if (UUID.class.equals(t)) {
@@ -225,19 +229,19 @@ public class ConvertTool {
 		}
 
 		if (short.class.equals(t) || Short.class.equals(t)) {
-			return toShort(strValue, t);
+			return toShort(checkIsEnum(value,strValue), t);
 		}
 		if (long.class.equals(t) || Long.class.equals(t)) {
-			return toLong(strValue, t);
+			return toLong(checkIsEnum(value,strValue), t);
 		}
 		if (double.class.equals(t) || Double.class.equals(t)) {
-			return toDouble(strValue, t);
+			return toDouble(checkIsEnum(value,strValue), t);
 		}
 		if (float.class.equals(t) || Float.class.equals(t)) {
-			return toFloat(strValue, t);
+			return toFloat(checkIsEnum(value,strValue), t);
 		}
 		if (Number.class.isAssignableFrom(t)) {
-			return t.getConstructor(String.class).newInstance(value);
+			return t.getConstructor(String.class).newInstance(checkIsEnum(value,strValue));
 		}
 		if (value == null) {
 			return null;
