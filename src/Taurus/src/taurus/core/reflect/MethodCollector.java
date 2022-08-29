@@ -163,4 +163,12 @@ public class MethodCollector {
     {
     	return getGlobalMethod("endinvoke");
     }
+    
+    /// <summary>
+    ///  全局EndInvokeMethod方法
+    /// </summary>
+    public static MethodInfo getGlobalOnError()
+    {
+    	return getGlobalMethod("onerror");
+    }
 }

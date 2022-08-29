@@ -27,16 +27,20 @@ public class ControllerCollector {
 			try {
 				if (_Lv1Controllers.size() == 0) {
 					String runPath = ControllerCollector.class.getResource("/").getPath();
-					String[] file = MvcConfig.getControllerJarNames().split(",");
-					for (String jar : file) {
-						try {
-							if (jar.endsWith(".jar")) {
-								initControllersByJar(runPath + jar);
+					String jarNames = MvcConfig.getControllerJarNames();
+					if (jarNames != null) {	
+						String[] file = jarNames.split(",");
+						for (String jar : file) {
+							try {
+								if (!jar.endsWith(".jar")) {
+									jar=jar+".jar";
+								}
+								initControllersByJar(runPath.replace("/classes/", "/lib/") + jar);
+							} catch (Exception e) {
+								// TODO: handle exception
 							}
-						} catch (Exception e) {
-							// TODO: handle exception
-						}
 
+						}
 					}
 					String rootPath = runPath.replace("/lib/", "/classes/");
 					initControllersByProjectClass(rootPath, rootPath);
@@ -106,7 +110,7 @@ public class ControllerCollector {
 	}
 
 	private static void initControllersByJar(String jarPath) throws IOException {
-		if (new File(jarPath).exists()) {
+		if (!new File(jarPath).exists()) {
 			return;
 		}
 		JarFile jarFile = null;

@@ -21,9 +21,10 @@ import taurus.core.tool.ConvertTool;
 import taurus.core.tool.string;
 
 /**
- * 核心控制器基类：所有的控制器都应该继承自此基类
- * 允许子类被二次或三次继承。
- * @author 路过秋天
+ * 核心控制器基类：所有的控制器都应该继承自此基类 允许子类被二次或三次继承。
+ * 
+ * @author 路过秋天 ：教程博客：https://www.cnblogs.com/cyq1162
+ * 					  开源地址：https://github.com/cyq1162/Taurus.MVC-java
  *
  */
 public abstract class Controller {
@@ -33,9 +34,9 @@ public abstract class Controller {
 	HttpRequest request;
 	HttpResponse response;
 
-	public	void ProcessRequest(HttpRequest request, HttpResponse response) throws IOException {
+	public void ProcessRequest(HttpRequest request, HttpResponse response) throws IOException {
 		this.request = request;
-		this.response =response;
+		this.response = response;
 		try {
 			initNameFromUrl();
 			MethodInfo methodInfo = MethodCollector.getMethod(_ControllerType, _MethodName);
@@ -46,11 +47,9 @@ public abstract class Controller {
 				if (globalDefault != null) {
 					Controller o = (Controller) globalDefault.newInstance();// 实例化
 					o.ProcessRequest(request, response);
-				}
-				else
-				{
+				} else {
 					response.setStatus(404);
-					write("404 : Invalid method for url.",false);
+					write("404 : Invalid method for url.", false);
 					writeExeResult();
 				}
 				return;
@@ -63,9 +62,19 @@ public abstract class Controller {
 				}
 			}
 			writeExeResult();
-		} catch (Exception e) {
+		} catch (Exception err) {
+			try {
+				MethodInfo methodInfo = MethodCollector.getGlobalOnError();
+				if (methodInfo != null) {
+					methodInfo.getMethod().invoke(null, err);
+				}
+				else
+				{
+					response.getWriter().write(err.getMessage());
+				}
 
-			// TODO: handle exception
+			} catch (Exception e) {
+			}
 		}
 
 	}
@@ -178,11 +187,9 @@ public abstract class Controller {
 				return false;
 			}
 		}
-		if(attrFlags.getHasRequire())
-		{
-			RequireInfo[] requireInfos=methodInfo.getAnnotationInfo().getRequireInfos();
-			if(requireInfos!=null)
-			{
+		if (attrFlags.getHasRequire()) {
+			RequireInfo[] requireInfos = methodInfo.getAnnotationInfo().getRequireInfos();
+			if (requireInfos != null) {
 				for (RequireInfo valid : requireInfos) {
 					if (valid.paraName.indexOf(',') > -1) {
 						for (String name : valid.paraName.split(",")) {
@@ -229,7 +236,7 @@ public abstract class Controller {
 		}
 	}
 
-	private boolean exeMethodInvoke(MethodInfo methodInfo) throws Exception  {
+	private boolean exeMethodInvoke(MethodInfo methodInfo) throws Exception {
 
 		Boolean isGoOn = false;
 
@@ -248,29 +255,29 @@ public abstract class Controller {
 		// }
 		// }
 
-		 Object[] paras=getInvokeParas(methodInfo);
-		 if (paras!=null)
-		 {
-			 methodInfo.getMethod().invoke(this, paras);
-			 isGoOn=true;
-		 }
-//		 if (IsHttpPost && _View != null)
-//		 {
-//		 string name = GetBtnName();
-//		 if (!string.IsNullOrEmpty(name))
-//		 {
-//		 MethodInfo postBtnMethod = MethodCollector.GetMethod(t, name);
-//		 if (postBtnMethod != null && postBtnMethod.Name != Const.Default)
-//		 {
-//		 GetInvokeParas(postBtnMethod, out paras);
-//		 postBtnMethod.Invoke(this, paras);
-//		 }
-//		 }
-//		
-//		 }
-//		 }
-			return isGoOn;
+		Object[] paras = getInvokeParas(methodInfo);
+		if (paras != null) {
+			methodInfo.getMethod().invoke(this, paras);
+			isGoOn = true;
+		}
+		// if (IsHttpPost && _View != null)
+		// {
+		// string name = GetBtnName();
+		// if (!string.IsNullOrEmpty(name))
+		// {
+		// MethodInfo postBtnMethod = MethodCollector.GetMethod(t, name);
+		// if (postBtnMethod != null && postBtnMethod.Name != Const.Default)
+		// {
+		// GetInvokeParas(postBtnMethod, out paras);
+		// postBtnMethod.Invoke(this, paras);
+		// }
+		// }
+		//
+		// }
+		// }
+		return isGoOn;
 	}
+
 	private Object[] getInvokeParas(MethodInfo methodInfo) throws Exception {
 
 		Object[] callParas;
@@ -314,21 +321,19 @@ public abstract class Controller {
 		}
 
 		return true;
-    }
-	
-	
-	
-	
+	}
+
 	private String getEncoding() {
-		String encode=response.getCharacterEncoding();
-		if (encode ==null || encode.length()==0 || encode.equals("ISO-8859-1")) {
-			encode="utf-8";
+		String encode = response.getCharacterEncoding();
+		if (encode == null || encode.length() == 0 || encode.equals("ISO-8859-1")) {
+			encode = "utf-8";
 			response.setCharacterEncoding(encode);
 		}
 		return encode;
 	}
+
 	private void writeExeResult() throws Exception {
-		String encode=getEncoding();
+		String encode = getEncoding();
 		// if (View != null)
 		// {
 		// context.Response.Write(View.OutXml);
@@ -336,9 +341,9 @@ public abstract class Controller {
 		// }
 		if (apiResult.length() > 0) {
 			String outResult = apiResult.toString();
-			String contentType=response.getContentType();
-			if (contentType==null || contentType.length() == 0) {
-				contentType="text/html;charset=" + encode;
+			String contentType = response.getContentType();
+			if (contentType == null || contentType.length() == 0) {
+				contentType = "text/html;charset=" + encode;
 				response.setContentType(contentType);
 			}
 			if (contentType.startsWith("text/html")) {
@@ -441,95 +446,85 @@ public abstract class Controller {
 	}
 
 	public void write(String msg, Boolean isSuccess) {
-		String json="{\"success\":"+(isSuccess?"true":"false")+",\"msg\":\""+msg+"\"}";
+		String json = "{\"success\":" + (isSuccess ? "true" : "false") + ",\"msg\":\"" + msg + "\"}";
 		apiResult.append(json);
 	}
 
-	public Boolean beforeInvoke(String methodName)
-    {
-        return true;
-    }
-    public void endInvoke(String methodName)
-    {
-
-    }
-    //region override
-    
-    //小写是关键字，这个就用大写了。
-    public void Default()
-    {
-
-    }
-    /// <summary>
-    /// if the result is false will stop invoke method
-    /// <para>检测身份是否通过</para>
-    /// </summary>
-    /// <returns></returns>
-    public Boolean checkToken()
-    {
-        return true;
-    }
-    /// <summary>
-    /// if the result is false will stop invoke method
-    /// <para>检测请求是否合法</para>
-    /// </summary>
-    /// <returns></returns>
-    public Boolean checkAck()
-    {
-        return true;
-    }
-
-    /// <summary>
-    /// if the result is false will stop invoke method
-    /// <para>检测微服务间的请求是否合法</para>
-    /// </summary>
-    /// <returns></returns>
-    public Boolean checkMicroService()
-    {
-    	return true;
-        //return MicroService.Config.ServerKey == Context.Request.Headers[MicroService.Const.HeaderKey];
-    }
-    //endregion
-
-    public String query(String key) {
-    	String value=request.getParameter(key);
-    	if(value==null)
-    	{
-    		if(getIsHttpPost())
-    		{
-    			String contentType=request.getContentType();
-    			if(contentType==null || !contentType.startsWith("multipart/form-data"))//非文件上传
-    			{
-		    		if(keyValueForPost==null)
-		    		{
-		    			initFormValueOnPost();
-		    		}
-		    		if(keyValueForPost.containsKey(key.toLowerCase()))
-		    		{
-		    			value=keyValueForPost.get(key.toLowerCase());
-		    		}
-    			}
-    		}
-    		if(value==null)
-    		{
-    			value=request.getHeader(key);
-    		}
-    	}
-    	return value;
+	public Boolean beforeInvoke(String methodName) {
+		return true;
 	}
 
-	public <T> T query(String key,Class<T> object)
-    {
-    	return ConvertTool.tryChangeType(query(key), object);
-    }
-    
+	public void endInvoke(String methodName) {
 
-    private void initFormValueOnPost() {
-    	keyValueForPost=new HashMap<String, String>();
+	}
+	// region override
+
+	// 小写是关键字，这个就用大写了。
+	public void Default() {
+
+	}
+
+	/// <summary>
+	/// if the result is false will stop invoke method
+	/// <para>检测身份是否通过</para>
+	/// </summary>
+	/// <returns></returns>
+	public Boolean checkToken() {
+		return true;
+	}
+
+	/// <summary>
+	/// if the result is false will stop invoke method
+	/// <para>检测请求是否合法</para>
+	/// </summary>
+	/// <returns></returns>
+	public Boolean checkAck() {
+		return true;
+	}
+
+	/// <summary>
+	/// if the result is false will stop invoke method
+	/// <para>检测微服务间的请求是否合法</para>
+	/// </summary>
+	/// <returns></returns>
+	public Boolean checkMicroService() {
+		return true;
+		// return MicroService.Config.ServerKey ==
+		// Context.Request.Headers[MicroService.Const.HeaderKey];
+	}
+	// endregion
+
+	public String query(String key) {
+		String value = request.getParameter(key);
+		if (value == null) {
+			if (getIsHttpPost()) {
+				String contentType = request.getContentType();
+				if (contentType == null || !contentType.startsWith("multipart/form-data"))// 非文件上传
+				{
+					if (keyValueForPost == null) {
+						initFormValueOnPost();
+					}
+					if (keyValueForPost.containsKey(key.toLowerCase())) {
+						value = keyValueForPost.get(key.toLowerCase());
+					}
+				}
+			}
+			if (value == null) {
+				value = request.getHeader(key);
+			}
+		}
+		return value;
+	}
+
+	public <T> T query(String key, Class<T> object) {
+		return ConvertTool.tryChangeType(query(key), object);
+	}
+
+	private void initFormValueOnPost() {
+		keyValueForPost = new HashMap<String, String>();
 		try {
-			HttpInputStream stream = (HttpInputStream)request.getInputStream();
-	        if (stream != null)
-	        {
+			HttpInputStream stream = (HttpInputStream) request.getInputStream();
+			if (stream != null) {
 				int len = request.getContentLength();
 				if (len > 0) {
 					byte[] bytes = new byte[len];
@@ -549,10 +544,10 @@ public abstract class Controller {
 						}
 					}
 				}
-	        }
+			}
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
-		
+
 	}
 }

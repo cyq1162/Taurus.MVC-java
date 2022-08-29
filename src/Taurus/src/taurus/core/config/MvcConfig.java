@@ -23,11 +23,13 @@ public class MvcConfig {
 	public static void set(String name, String value) {
 		if(!string.IsNullOrEmpty(name) && !string.IsNullOrEmpty(value))
 		{
+			name=name.replace("taurus.", "mvc.");
 			keyValue.put(name.toLowerCase(), value);
 		}
 	}
 	public static void init(String name,String value) {
 		name=name.toLowerCase();
+		name=name.replace("taurus.", "mvc.");
 		if(!keyValue.containsKey(name))
 		{
 			keyValue.put(name, value);

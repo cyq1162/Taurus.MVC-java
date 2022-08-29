@@ -33,7 +33,7 @@ public class MvcFilter {
 					response.setHeader("Access-Control-Allow-Headers", request.getHeader("Access-Control-Request-Headers"));
 				}
 				return false;
-			} else if (request.getHeader("Referer") == null || isCORSUrl(request)) {
+			} else if (request.getHeader("Referer") == null || isCORSUrl(request,response)) {
 				// øÁ”Ú∑√Œ 
 				response.setHeader("Access-Control-Allow-Origin", "*");
 				response.setHeader("Access-Control-Allow-Credentials", "true");
@@ -42,14 +42,14 @@ public class MvcFilter {
 		return true;
     }
 
-	private static boolean isCORSUrl(HttpRequest request) {
+	private static boolean isCORSUrl(HttpRequest request, HttpResponse response) {
 		try {
 			URI uri = new URI(request.getHeader("Referer"));
 			if (!uri.getHost().equals(request.getServerName()) || uri.getPort()!=request.getServerPort()) {
 				return true;
 			}
-		} catch (Exception e) {
-			// TODO: handle exception
+		} catch (Exception err) {
+			WriteError(err.getMessage(), response);
 		}
 
 		return false;
@@ -114,7 +114,7 @@ public class MvcFilter {
 		 while (configs.hasMoreElements()) {
 			 String name=configs.nextElement();
 			 String nameLower=name.toLowerCase();
-			 if(nameLower.startsWith("mvc."))
+			 if(nameLower.startsWith("mvc.") || nameLower.startsWith("taurus."))
 			 {
 				 MvcConfig.set(nameLower, context.getInitParameter(name));
 			 }

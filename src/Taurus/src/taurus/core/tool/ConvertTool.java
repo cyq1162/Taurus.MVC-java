@@ -5,7 +5,12 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.UUID;
-
+/**
+ * 数据类型转换类。
+ * @author 路过秋天 ：教程博客：https://www.cnblogs.com/cyq1162
+ * 					  开源地址：https://github.com/cyq1162/Taurus.MVC-java
+ *
+ */
 public class ConvertTool {
 
 	private static String checkIsEnum(Object value,String strValue)
