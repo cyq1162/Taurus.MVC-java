@@ -66,10 +66,8 @@ public abstract class Controller {
 			try {
 				MethodInfo methodInfo = MethodCollector.getGlobalOnError();
 				if (methodInfo != null) {
-					methodInfo.getMethod().invoke(null, err);
-				}
-				else
-				{
+					methodInfo.getMethod().invoke(null, this, err);
+				} else {
 					response.getWriter().write(err.getMessage());
 				}
 
