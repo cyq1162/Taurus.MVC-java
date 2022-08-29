@@ -1,6 +1,7 @@
 package taurus.core;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Parameter;
 import java.net.URLDecoder;
 import java.util.HashMap;
@@ -63,10 +64,15 @@ public abstract class Controller {
 			}
 			writeExeResult();
 		} catch (Exception err) {
+			if(err instanceof InvocationTargetException)
+			{
+				 err=(Exception)err.getCause();
+			}
 			try {
 				MethodInfo methodInfo = MethodCollector.getGlobalOnError();
 				if (methodInfo != null) {
 					methodInfo.getMethod().invoke(null, this, err);
+					writeExeResult();
 				} else {
 					response.getWriter().write(err.getMessage());
 				}
@@ -331,13 +337,8 @@ public abstract class Controller {
 	}
 
 	private void writeExeResult() throws Exception {
-		String encode = getEncoding();
-		// if (View != null)
-		// {
-		// context.Response.Write(View.OutXml);
-		// View = null;
-		// }
 		if (apiResult.length() > 0) {
+			String encode = getEncoding();
 			String outResult = apiResult.toString();
 			String contentType = response.getContentType();
 			if (contentType == null || contentType.length() == 0) {
