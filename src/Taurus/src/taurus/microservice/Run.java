@@ -4,7 +4,6 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Random;
-
 import taurus.microservice.config.MsConfig;
 import taurus.microservice.config.MsConst;
 import taurus.mvc.http.HttpContext;
@@ -24,7 +23,7 @@ public class Run {
              isStart = true;
              if (Client.getIsRunAsClient())
              {
-            	 HttpContext.Current.log("MicroService.Run.Start.V2.0 : ");
+            	 HttpContext.Current.log("MicroService.Run.Start.V"+getVersion()+" : ");
                  if (string.IsNullOrEmpty(MsConfig.getAppRunUrl()))
                  {
                 	 MsConfig.set(MsConst.MicroServiceAppRunUrl, host.toLowerCase());//设置当前程序运行的请求网址。
@@ -99,4 +98,11 @@ public class Run {
 		return stringBuffer.toString();
 	}
 
+	/**
+	 * 获取当前版本号。
+	 * @return
+	 */
+	private static String getVersion() {
+		return Run.class.getPackage().getImplementationVersion();
+	}
 }
