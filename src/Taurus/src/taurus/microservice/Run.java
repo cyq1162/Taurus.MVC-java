@@ -30,18 +30,19 @@ public class Run {
                  }
                  new Thread(new Runnable() {
 					public void run() {
+						Random random=new Random();
 						 while (true)
 			                {
 			                    try
 			                    {
 			                        AfterRegHost(RegHost());
-			                        Thread.sleep(5000+new Random().nextInt(5000));//5-10秒循环1次。
+			                        Thread.sleep(5000+random.nextInt(5000));//5-10秒循环1次。
 			                    }
 			                    catch (Exception err)
 			                    {
 			                    	try
 			                    	{
-			                    		Thread.sleep(5000+new Random().nextInt(5000));//5-10秒循环1次。
+			                    		Thread.sleep(5000+random.nextInt(5000));//5-10秒循环1次。
 			                    	}catch (Exception e)
 				                    {}
 			                    }
@@ -61,9 +62,10 @@ public class Run {
 	private static String RegHost() {
 		String regUrl = MsConfig.getClientRegUrl() + "/MicroService/Reg";
 		StringBuffer stringBuffer = new StringBuffer();
+		HttpURLConnection conn=null;
 		try {
 			URL url = new URL(regUrl);
-			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+			conn = (HttpURLConnection) url.openConnection();
 			conn.setConnectTimeout(5 * 1000);
 			conn.setReadTimeout(5 * 1000);
 			conn.setRequestProperty(MsConst.MicroServiceHeaderKey, MsConfig.getClientKey());
@@ -86,6 +88,7 @@ public class Run {
 					stringBuffer.append(new String(bytes, 0, len));
 				}
 			}
+			conn.disconnect();
 			Client.RegCenterIsLive=true;
 		} catch (Exception err) {
 			Client.RegCenterIsLive=false;
@@ -94,6 +97,12 @@ public class Run {
 				MsConfig.set(MsConfig.getClientRegUrl(), Client.getHost2());//切换到备用库
 			}
 			stringBuffer.append(err.getMessage());
+		}
+		finally {
+			if(conn!=null)
+			{
+				conn.disconnect();
+			}
 		}
 		return stringBuffer.toString();
 	}

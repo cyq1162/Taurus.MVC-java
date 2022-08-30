@@ -120,7 +120,7 @@ public class MvcFilter {
 	 * @param context
 	 */
 	static void initConfig(HttpContext context) {
-		context.log("Taurus.Mvc Filter.initConfig() Start: ");
+		context.log("Taurus.Mvc Filter.initConfig() Start on : "+context.getServerInfo());
 		HttpContext.Current=context;
 		Enumeration<String> configs=context.getInitParameterNames();
 		 while (configs.hasMoreElements()) {
