@@ -1,13 +1,74 @@
 package taurus.mvc.http;
 
-import javax.servlet.http.Cookie;
+public class HttpCookie {
 
-public class HttpCookie extends Cookie {
-
-	private static final long serialVersionUID = 1L;
-
-	HttpCookie(Cookie cookie) {
-		super(cookie.getName(), cookie.getValue());
+	public String getName() {
+		return Name;
+	}
+	public void setName(String name) {
+		Name = name;
+	}
+	public String getValue() {
+		return Value;
+	}
+	public void setValue(String value) {
+		Value = value;
+	}
+	public String getComment() {
+		return Comment;
+	}
+	public void setComment(String comment) {
+		Comment = comment;
+	}
+	public String getDomain() {
+		return Domain;
+	}
+	public void setDomain(String domain) {
+		Domain = domain;
+	}
+	public String getPath() {
+		return Path;
+	}
+	public void setPath(String path) {
+		Path = path;
+	}
+	public boolean isHttpOnly() {
+		return isHttpOnly;
+	}
+	public void setHttpOnly(boolean isHttpOnly) {
+		this.isHttpOnly = isHttpOnly;
+	}
+	public int getMaxAge() {
+		return MaxAge;
+	}
+	public void setMaxAge(int maxAge) {
+		MaxAge = maxAge;
+	}
+	public boolean isSecure() {
+		return isSecure;
+	}
+	public void setSecure(boolean isSecure) {
+		this.isSecure  = isSecure;
+	}
+	public int getVersion() {
+		return Version;
+	}
+	public void setVersion(int version) {
+		Version = version;
+	}
+	String Name;
+	String Value;
+	String Comment;
+	String Domain;
+	String Path;
+	boolean isHttpOnly;
+	int MaxAge;
+	boolean isSecure;
+	int Version;
+	
+	HttpCookie(javax.servlet.http.Cookie cookie) {
+		this.setName(cookie.getName());
+		this.setValue(cookie.getValue());
 		this.setComment(cookie.getComment());
 		this.setDomain(cookie.getDomain());
 		this.setHttpOnly(cookie.isHttpOnly());
@@ -17,7 +78,8 @@ public class HttpCookie extends Cookie {
 		this.setVersion(cookie.getVersion());
 	}
 	HttpCookie(jakarta.servlet.http.Cookie cookie) {
-		super(cookie.getName(), cookie.getValue());
+		this.setName(cookie.getName());
+		this.setValue(cookie.getValue());
 		this.setComment(cookie.getComment());
 		this.setDomain(cookie.getDomain());
 		this.setHttpOnly(cookie.isHttpOnly());
@@ -28,8 +90,8 @@ public class HttpCookie extends Cookie {
 	}
 
 	public HttpCookie(String name, String value) {
-		super(name, value);
-		// TODO Auto-generated constructor stub
+		this.setName(name);
+		this.setValue(value);
 	}
 
 	static HttpCookie[] format(javax.servlet.http.Cookie[] cookie) {
@@ -59,7 +121,18 @@ public class HttpCookie extends Cookie {
 		cookie.setHttpOnly(arg0.isHttpOnly());
 		cookie.setMaxAge(arg0.getMaxAge());
 		cookie.setPath(arg0.getPath());
-		cookie.setSecure(arg0.getSecure());
+		cookie.setSecure(arg0.isSecure());
+		cookie.setVersion(arg0.getVersion());
+		return cookie;
+	}
+	static javax.servlet.http.Cookie toJavaxCookie(HttpCookie arg0) {
+		javax.servlet.http.Cookie cookie=new javax.servlet.http.Cookie(arg0.getName(), arg0.getValue());
+		cookie.setDomain(arg0.getDomain());
+		cookie.setComment(arg0.getComment());
+		cookie.setHttpOnly(arg0.isHttpOnly());
+		cookie.setMaxAge(arg0.getMaxAge());
+		cookie.setPath(arg0.getPath());
+		cookie.setSecure(arg0.isSecure());
 		cookie.setVersion(arg0.getVersion());
 		return cookie;
 	}

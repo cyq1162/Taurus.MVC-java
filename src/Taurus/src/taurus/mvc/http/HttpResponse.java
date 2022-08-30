@@ -181,7 +181,7 @@ public class HttpResponse{
 	public void addCookie(HttpCookie arg0) {
 		if(javaxResponse!=null)
 		{
-			javaxResponse.addCookie(arg0);
+			javaxResponse.addCookie(HttpCookie.toJavaxCookie(arg0));
 		}
 		else
 		{

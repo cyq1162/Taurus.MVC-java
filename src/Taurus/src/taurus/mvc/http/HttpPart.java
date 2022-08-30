@@ -5,10 +5,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import javax.servlet.http.Part;
-
-
-public class HttpPart implements Part {
+public class HttpPart{
 
 	javax.servlet.http.Part javaxPart;
 	public HttpPart(javax.servlet.http.Part part) {
@@ -18,7 +15,7 @@ public class HttpPart implements Part {
 	public HttpPart(jakarta.servlet.http.Part part) {
 		this.jakartaPart=part;
 	}
-	@Override
+	
 	public void delete() throws IOException {
 		if(javaxPart!=null)
 		{
@@ -27,7 +24,7 @@ public class HttpPart implements Part {
 		jakartaPart.delete();
 	}
 
-	@Override
+	
 	public String getContentType() {
 		if(javaxPart!=null)
 		{
@@ -36,7 +33,7 @@ public class HttpPart implements Part {
 		return jakartaPart.getContentType();
 	}
 
-	@Override
+	
 	public String getHeader(String arg0) {
 		if(javaxPart!=null)
 		{
@@ -45,7 +42,7 @@ public class HttpPart implements Part {
 		return jakartaPart.getHeader(arg0);
 	}
 
-	@Override
+	
 	public Collection<String> getHeaderNames() {
 		if(javaxPart!=null)
 		{
@@ -54,7 +51,7 @@ public class HttpPart implements Part {
 		return jakartaPart.getHeaderNames();
 	}
 
-	@Override
+	
 	public Collection<String> getHeaders(String arg0) {
 		if(javaxPart!=null)
 		{
@@ -63,7 +60,7 @@ public class HttpPart implements Part {
 		return jakartaPart.getHeaders(arg0);
 	}
 
-	@Override
+	
 	public InputStream getInputStream() throws IOException {
 		if(javaxPart!=null)
 		{
@@ -72,7 +69,7 @@ public class HttpPart implements Part {
 		return jakartaPart.getInputStream();
 	}
 
-	@Override
+	
 	public String getName() {
 		if(javaxPart!=null)
 		{
@@ -81,7 +78,7 @@ public class HttpPart implements Part {
 		return jakartaPart.getName();
 	}
 
-	@Override
+	
 	public long getSize() {
 		if(javaxPart!=null)
 		{
@@ -90,7 +87,7 @@ public class HttpPart implements Part {
 		return jakartaPart.getSize();
 	}
 
-	@Override
+	
 	public String getSubmittedFileName() {
 		if(javaxPart!=null)
 		{
@@ -99,7 +96,7 @@ public class HttpPart implements Part {
 		return jakartaPart.getSubmittedFileName();
 	}
 
-	@Override
+	
 	public void write(String arg0) throws IOException {
 		if(javaxPart!=null)
 		{
