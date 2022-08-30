@@ -24,7 +24,7 @@ public class ControllerCollector {
     /**
      * 控制器收集初始化：由系统进行调用
      */
-	public static void initController() {
+	public static Boolean initController() {
     	if (_Lv1Controllers.size() == 0) {
 			lock.lock();
 			try {
@@ -52,12 +52,20 @@ public class ControllerCollector {
 				lock.unlock();
 			}
 		}
+    	return _Lv1Controllers.size()>0;
 	}
 	private static Map<String, Class<?>> getControllers(int level) {
 		//initController();
 		return level == 1 ? _Lv1Controllers : _Lv2Controllers;
 	}
 
+	/**
+	 * 是否收集到了控制器：由系统进行调用
+	 * @return
+	 */
+	public static boolean getHasController() {
+		return _Lv1Controllers.size()>0;
+	}
 	
 	private static void initControllersByProjectClass(String classPath, String rootPath) {
 		File file = new File(classPath);

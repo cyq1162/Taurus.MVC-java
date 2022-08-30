@@ -120,8 +120,8 @@ public class MvcFilter {
 	 * @param context
 	 */
 	static void initConfig(HttpContext context) {
+		context.log("Taurus.Mvc Filter.initConfig() Start: ");
 		HttpContext.Current=context;
-		context.log("Taurus.MVC Start : ");
 		Enumeration<String> configs=context.getInitParameterNames();
 		 while (configs.hasMoreElements()) {
 			 String name=configs.nextElement();
@@ -136,10 +136,18 @@ public class MvcFilter {
 			 }
 			 context.log(name+" : "+context.getInitParameter(name));
 		}
-		ControllerCollector.initController(); 
+		if(ControllerCollector.initController())
+		{
+			context.log("Taurus.MVC State : Starting.");
+		}
+		else
+		{
+			context.log("Taurus.MVC State : Stopped.");
+		}
 		if(!string.IsNullOrEmpty(MsConfig.getAppRunUrl()))
 		{
 			Run.start(MsConfig.getAppRunUrl());//Ö÷¶¯Æô¶¯¡£
 		}
+		context.log("Taurus.Mvc Filter.initConfig() End.");
 	}
 }

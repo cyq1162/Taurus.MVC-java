@@ -16,6 +16,7 @@ import taurus.mvc.entity.MethodInfo;
 import taurus.mvc.http.HttpContext;
 import taurus.mvc.http.HttpRequest;
 import taurus.mvc.http.HttpResponse;
+import taurus.mvc.reflect.ControllerCollector;
 import taurus.mvc.reflect.MethodCollector;
 import taurus.mvc.tool.string;
 
@@ -28,7 +29,7 @@ public class MvcFilterForJakarta implements Filter {
 		// TODO Auto-generated method stub
 		HttpServletRequest request=(HttpServletRequest)arg0;
 		HttpServletResponse response=(HttpServletResponse)arg1;
-		if(request.getRequestURI().contains("."))
+		if(request.getRequestURI().contains(".") || !ControllerCollector.getHasController())
 		{
 			arg2.doFilter(arg0, arg1);
 			return;
