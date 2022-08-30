@@ -23,7 +23,7 @@ public class Run {
              isStart = true;
              if (Client.getIsRunAsClient())
              {
-            	 HttpContext.Current.log("MicroService.Run.Start.V"+getVersion()+" : ");
+            	 HttpContext.Current.log("Taurus.MicroService.Client V"+getVersion()+" Start : ");
                  if (string.IsNullOrEmpty(MsConfig.getAppRunUrl()))
                  {
                 	 MsConfig.set(MsConst.MicroServiceAppRunUrl, host.toLowerCase());//设置当前程序运行的请求网址。
