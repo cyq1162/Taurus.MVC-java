@@ -56,9 +56,9 @@ public abstract class Controller {
 				return;
 			}
 			if (checkMethodAnnotatedLimit(methodInfo)) {
-				if (exeBeforeInvoke()) {
+				if (exeBeforeInvoke(methodInfo.getAnnotationInfo().getHasIgnoreDefaultController())) {
 					if (exeMethodInvoke(methodInfo)) {
-						exeEndInvoke();
+						exeEndInvoke(methodInfo.getAnnotationInfo().getHasIgnoreDefaultController());
 					}
 				}
 			}
@@ -147,7 +147,7 @@ public abstract class Controller {
 			MethodInfo checkAck = MethodCollector.getMethod(_ControllerType, "checkAck", false);
 			if (checkAck != null) {
 				isGoOn = (Boolean) checkAck.getMethod().invoke(this);
-			} else {
+			} else if(!attrFlags.getHasIgnoreDefaultController()) {
 				checkAck = MethodCollector.getGlobalCheckAck();
 				if (checkAck != null) {
 					isGoOn = (Boolean) checkAck.getMethod().invoke(null, new Object[] { this });
@@ -158,29 +158,12 @@ public abstract class Controller {
 				return false;
 			}
 		}
-		if (attrFlags.getHasMicroService())// 有[MicroService]
-		{
-			// 【如果开启全局，即需要调整授权机制，则原有局部机制失效。】
-			MethodInfo microServiceInfo = MethodCollector.getGlobalCheckMicroService();
-			if (microServiceInfo != null) {
-				isGoOn = (Boolean) microServiceInfo.getMethod().invoke(null, new Object[] { this });
-			} else {
-				microServiceInfo = MethodCollector.getMethod(_ControllerType, "checkMicroService", false);
-				if (microServiceInfo != null) {
-					isGoOn = (Boolean) microServiceInfo.getMethod().invoke(this);
-				}
-			}
-			if (!isGoOn) {
-				write("checkMicroService() : result is illegal.", false);
-				return false;
-			}
-		}
 		if (attrFlags.getHasToken())// 有[Token]
 		{
 			MethodInfo checkToken = MethodCollector.getMethod(_ControllerType, "checkToken", false);
 			if (checkToken != null) {
 				isGoOn = (Boolean) (checkToken.getMethod().invoke(this));
-			} else {
+			} else  if(!attrFlags.getHasIgnoreDefaultController()){
 				checkToken = MethodCollector.getGlobalCheckToken();
 				if (checkToken != null) {
 					isGoOn = (Boolean) checkToken.getMethod().invoke(null, new Object[] { this });
@@ -191,6 +174,28 @@ public abstract class Controller {
 				return false;
 			}
 		}
+		if (attrFlags.getHasMicroService())// 有[MicroService]
+		{
+			// 【如果开启全局，即需要调整授权机制，则原有局部机制失效。】
+			MethodInfo microServiceInfo = null;
+			if (!attrFlags.getHasIgnoreDefaultController()) {
+				microServiceInfo = MethodCollector.getGlobalCheckMicroService();
+				if (microServiceInfo != null) {
+					isGoOn = (Boolean) microServiceInfo.getMethod().invoke(null, new Object[] { this });
+				}
+			}
+			if(isGoOn && microServiceInfo==null) {
+				microServiceInfo = MethodCollector.getMethod(_ControllerType, "checkMicroService", false);
+				if (microServiceInfo != null) {
+					isGoOn = (Boolean) microServiceInfo.getMethod().invoke(this);
+				}
+			}
+			if (!isGoOn) {
+				write("checkMicroService() : result is illegal.", false);
+				return false;
+			}
+		}
+
 		if (attrFlags.getHasRequire()) {
 			RequireInfo[] requireInfos = methodInfo.getAnnotationInfo().getRequireInfos();
 			if (requireInfos != null) {
@@ -213,12 +218,15 @@ public abstract class Controller {
 
 	}
 
-	private boolean exeBeforeInvoke() throws Exception {
+	private boolean exeBeforeInvoke(boolean isIgnoreGlobal) throws Exception {
 		boolean isGoOn = true;
-		MethodInfo methodInfo = MethodCollector.getGlobalBeforeInvoke();
-		if (methodInfo != null)// 先调用全局
-		{
-			isGoOn = (Boolean) methodInfo.getMethod().invoke(null, new Object[] { this });
+		MethodInfo methodInfo = null;
+		if (!isIgnoreGlobal) {
+			methodInfo = MethodCollector.getGlobalBeforeInvoke();
+			if (methodInfo != null)// 先调用全局
+			{
+				isGoOn = (Boolean) methodInfo.getMethod().invoke(null, new Object[] { this });
+			}
 		}
 		if (isGoOn) {
 			methodInfo = MethodCollector.getMethod(_ControllerType, "beforeInvoke", false);
@@ -229,14 +237,16 @@ public abstract class Controller {
 		return isGoOn;
 	}
 
-	private void exeEndInvoke() throws Exception {
+	private void exeEndInvoke(boolean isIgnoreGlobal) throws Exception {
 		MethodInfo methodInfo = MethodCollector.getMethod(_ControllerType, "endInvoke", false);
 		if (methodInfo != null) {
 			methodInfo.getMethod().invoke(this, new Object[] { _MethodName });
 		}
-		methodInfo = MethodCollector.getGlobalEndInvoke();
-		if (methodInfo != null) {
-			methodInfo.getMethod().invoke(null, new Object[] { this });
+		if (!isIgnoreGlobal) {
+			methodInfo = MethodCollector.getGlobalEndInvoke();
+			if (methodInfo != null) {
+				methodInfo.getMethod().invoke(null, new Object[] { this });
+			}
 		}
 	}
 
@@ -443,7 +453,14 @@ public abstract class Controller {
 		apiResult.append(msg);
 
 	}
+	public void write(byte[] buf) throws IOException {
+		response.getOutputStream().write(buf);
 
+	}
+	public void write(char[] buf) throws IOException {
+		response.getWriter().write(buf);
+
+	}
 	public void write(String msg, Boolean isSuccess) {
 		String json = "{\"success\":" + (isSuccess ? "true" : "false") + ",\"msg\":\"" + msg + "\"}";
 		apiResult.append(json);

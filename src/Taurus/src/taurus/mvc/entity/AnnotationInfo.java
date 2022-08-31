@@ -4,6 +4,15 @@ import taurus.mvc.annotation.Require;
 
 public class AnnotationInfo {
 
+	private boolean _HasIgnoreDefaultController;
+
+	public boolean getHasIgnoreDefaultController() {
+		return _HasIgnoreDefaultController;
+	}
+
+	public void setHasIgnoreDefaultController(Boolean value) {
+		this._HasIgnoreDefaultController = value;
+	}
 	private boolean _HasRequire;
     public Boolean getHasRequire()
     {

@@ -13,6 +13,7 @@ import taurus.mvc.annotation.HttpGet;
 import taurus.mvc.annotation.HttpHead;
 import taurus.mvc.annotation.HttpPost;
 import taurus.mvc.annotation.HttpPut;
+import taurus.mvc.annotation.IgnoreDefaultController;
 import taurus.mvc.annotation.MicroService;
 import taurus.mvc.annotation.Require;
 import taurus.mvc.annotation.Token;
@@ -46,7 +47,8 @@ public class MethodCollector {
 		Boolean hasToken = t.isAnnotationPresent(Token.class);
 		Boolean hasAck = t.isAnnotationPresent(Ack.class);
 		Boolean hasMicroService = t.isAnnotationPresent(MicroService.class);
-
+		Boolean hasIgnoreDefaultController = t.isAnnotationPresent(IgnoreDefaultController.class);
+		
 		Method[] methods = t.getDeclaredMethods();
 		Map<String, MethodInfo> dic = new HashMap<String, MethodInfo>();
 
@@ -67,7 +69,8 @@ public class MethodCollector {
 			anno.setHasToken(hasToken || method.isAnnotationPresent(Token.class));
 			anno.setHasAck(hasAck || method.isAnnotationPresent(Ack.class));
 			anno.setHasMicroService(hasMicroService || method.isAnnotationPresent(MicroService.class));
-
+			anno.setHasIgnoreDefaultController(hasIgnoreDefaultController);
+			
 			anno.setHasHttpGet(method.isAnnotationPresent(HttpGet.class));
 			anno.setHasHttpPost(method.isAnnotationPresent(HttpPost.class));
 			anno.setHasHttpHead(method.isAnnotationPresent(HttpHead.class));
