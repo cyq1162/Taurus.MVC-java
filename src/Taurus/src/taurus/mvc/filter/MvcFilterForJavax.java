@@ -14,6 +14,7 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import taurus.mvc.config.MvcConst;
 import taurus.mvc.entity.MethodInfo;
 import taurus.mvc.http.HttpContext;
 import taurus.mvc.http.HttpRequest;
@@ -42,9 +43,9 @@ public class MvcFilterForJavax implements Filter {
 
 				String url = (String) methodInfo.getMethod().invoke(null, new Object[] { new HttpRequest(request) });
 				if (!string.IsNullOrEmpty(url) && !url.equals(request.getRequestURI())) {
-					request.setAttribute("oldUrl", request.getRequestURL());
-					request.setAttribute("oldUri", request.getRequestURI());
-					request.setAttribute("oldQuery", request.getQueryString());
+					request.setAttribute(MvcConst.OldUrl, request.getRequestURL());
+					request.setAttribute(MvcConst.OldUri, request.getRequestURI());
+					request.setAttribute(MvcConst.OldQueryString, request.getQueryString());
 					arg0.getRequestDispatcher(url).forward(arg0, arg1);
 					return;
 				}

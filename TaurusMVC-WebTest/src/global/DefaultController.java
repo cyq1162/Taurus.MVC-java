@@ -4,6 +4,7 @@ import taurus.mvc.Controller;
 import taurus.mvc.annotation.Ack;
 import taurus.mvc.annotation.MicroService;
 import taurus.mvc.annotation.Token;
+import taurus.mvc.config.MvcConst;
 import taurus.mvc.http.HttpRequest;
 
 /**
@@ -16,6 +17,15 @@ public class DefaultController extends Controller {
 	public void exeMethodAndThrowExcection() throws Exception {
 		write("exe exeMethodAndThrowExcection method.<br/>");
 		throw new Exception("I throw a Exception..hehehe.<br/>");
+	}
+	public void first() {
+		write("exe first method.<br/>");
+	}
+	public void second(String value) {
+		write("exe second method : value="+value+".<br/>");
+		write("OldQueryString:"+getRequest().getAttribute(MvcConst.OldQueryString)+"<br/>");
+		write("OldUri :"+getRequest().getAttribute(MvcConst.OldUri)+"<br/>");
+		write("OldUrl :"+getRequest().getAttribute(MvcConst.OldUrl)+"<br/>");
 	}
 	@Ack
 	@Token
@@ -73,9 +83,9 @@ public class DefaultController extends Controller {
      */
     public static String routeMapInvoke(HttpRequest request)
     {
-    	if(request.getRequestURI().startsWith("/attr/testchecktoken2"))
+    	if(request.getRequestURI().startsWith("/default/first"))
     	{
-    		return "/attr/testchecktoken";
+    		return "/default/second?"+request.getQueryString();
     	}
     	return "";
     }
