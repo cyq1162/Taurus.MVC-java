@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>login</title>
+<style type="text/css">
+a:link, a:visited, a:active { color: #015FB6; text-decoration:none}
+a:hover { color: #E33E06; }
+</style>
+</head>
+<body>
+   <h1> Taurus.Mvc - WebTest</h1><hr />
+   @Annotation Test : 注解使用 示例与测试。<hr />
+   <a href="/annotation/testchecktoken" target="_blank">@Token</a><br>
+   <a href="/annotation/testcheckack" target="_blank">@Ack</a><br>
+   <a href="/annotation/testcheckMicroService" target="_blank">@MicroService</a><br>
+   <a href="/annotation/testignoredefaultcontroller" target="_blank">@IgnoreDefaultController</a><br>
+   <a href="/annotation/testhttpget" target="_blank">@HttpGet</a><br>
+   <a href="/annotation/testhttppost" target="_blank">@HttpPost</a><br>
+   <a href="/annotation/testhttphead" target="_blank">@HttpHead</a><br>
+   <a href="/annotation/testhttpput" target="_blank">@HttpPut</a><br>
+   <a href="/annotation/testhttpdelete" target="_blank">@HttpDelete</a><br>
+   <a href="/Require/id" target="_blank">@Require ：id para is require</a><br>
+    <a href="/Require/id2?id=9999" target="_blank">@Require ： has id</a><br>
+     <a href="/Require/id3" target="_blank">@Require：regex</a><br>
+      <a href="/Require/id4" target="_blank">@Require：custom tip</a><br>
+   
+   <hr />@Override Check Event Method Test : 可重写的3个事件 示例与测试。<hr />
+   <a href="/overrideevent/testchecktoken" target="_blank">checkToken</a><br>
+   <a href="/overrideevent/testcheckack" target="_blank">checkAck</a><br>
+   <a href="/overrideevent/testcheckMicroService" target="_blank">checkMicroService</a><br>
+
+    <hr />@Override Before End Event Method Test : 可重写的方法拦截前后事件 示例与测试。<hr />
+   <a href="/OverrideBeforeEndInvoke/testBeforeInkoke" target="_blank">beforeInvoke</a><br>
+   <a href="/OverrideBeforeEndInvoke/testEndInkoke" target="_blank">endInvoke</a><br>
+     <hr />@Override Default Event Method Test : 可重写的处理控制器内找不到的方法 示例与测试。<hr />
+      <a href="/OverrideBeforeEndInvoke/404path" target="_blank">Default for 404 web page</a><br>
+       <hr />FileController Test : 控制器名称规范与文件上传接收 示例与测试。<hr />
+        <a href="/file/showControllerName" target="_blank">showControllerName</a><br><br>
+        <form action="/file/upload" method="post" target="_blank" enctype="multipart/form-data">
+         <input type="text" name="name" value="Hello World" />
+        <input type="file" name="myFile" /><input type="submit" value="upload file" />
+        </form>
+        <hr />Global： DefaultController Test : 全局：默认控制器 示例与测试。<hr />
+         <a href="/default/showControllerName?ack=1&token=2&microservice=3" target="_blank">exeCommonMethod</a><br>
+         <a href="/default/exeMethodAndThrowExcection?ack=1&token=2&microservice=3" target="_blank">exeMethodAndThrowExcection</a><br>
+          <a href="/abc/404" target="_blank">Global 404 on Default Method</a><br>
+</body>
+</html>
