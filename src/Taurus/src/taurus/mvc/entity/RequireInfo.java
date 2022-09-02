@@ -10,7 +10,7 @@ public class RequireInfo
 {
 	
     public String paraName, regex, emptyTip, regexTip;
-    public boolean isRequire, isValidated;
+    public boolean isRequire;
     public RequireInfo(Require require)
     {
     	
