@@ -387,13 +387,19 @@ public class HttpRequest {
 		try {
 
 			if (javaxRequest != null) {
-				return new HttpPart(javaxRequest.getPart(arg0));
+				if(javaxRequest.getPart(arg0)!=null)
+				{
+					return new HttpPart(javaxRequest.getPart(arg0));
+				}
 			}
-
-			return new HttpPart(jakartaRequest.getPart(arg0));
+			if(jakartaRequest.getPart(arg0)!=null)
+			{
+				return new HttpPart(jakartaRequest.getPart(arg0));
+			}
 		} catch (Exception err) {
-			return null;
+			
 		}
+		return null;
 	}
 
 	

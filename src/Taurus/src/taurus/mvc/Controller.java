@@ -19,6 +19,7 @@ import taurus.mvc.http.HttpResponse;
 import taurus.mvc.reflect.ControllerCollector;
 import taurus.mvc.reflect.MethodCollector;
 import taurus.mvc.tool.ConvertTool;
+import taurus.mvc.tool.Debug;
 import taurus.mvc.tool.string;
 
 /**
@@ -64,11 +65,13 @@ public abstract class Controller {
 			}
 			writeExeResult();
 		} catch (Exception err) {
+			Debug.log(err,"Controller.ProcessRequest");
 			if(err instanceof InvocationTargetException)
 			{
 				 err=(Exception)err.getCause();
 			}
 			try {
+				request.getContext().log(err.getMessage());
 				MethodInfo methodInfo = MethodCollector.getGlobalOnError();
 				if (methodInfo != null) {
 					methodInfo.getMethod().invoke(null, this, err);
@@ -78,6 +81,7 @@ public abstract class Controller {
 				}
 
 			} catch (Exception e) {
+				Debug.log(e,"MethodCollector.getGlobalOnError");
 			}
 		}
 
@@ -210,7 +214,6 @@ public abstract class Controller {
 					} else if (!requireValidate(valid, query(valid.paraName))) {
 						return false;
 					}
-
 				}
 			}
 		}
@@ -303,12 +306,11 @@ public abstract class Controller {
 			for (int i = 0; i < parameters.length; i++) {
 				Parameter parameter = parameters[i];
 				String name = parameter.getName();
-				String value = query(name);
 				Class<?> type = parameter.getType();
 				if (HttpPart.class.equals(type)) {
 					callParas[i] = request.getPart(name);
 				} else {
-					callParas[i] = ConvertTool.changeType(value, type);
+					callParas[i] = ConvertTool.changeType(query(name), type);
 				}
 			}
 
@@ -524,6 +526,14 @@ public abstract class Controller {
 						value = keyValueForPost.get(key.toLowerCase());
 					}
 				}
+				else
+				{
+					HttpPart part=request.getPart(key);
+					if(part!=null)
+					{
+						value=part.getSubmittedFileName();
+					}
+				}
 			}
 			if (value == null) {
 				value = request.getHeader(key);
@@ -561,8 +571,8 @@ public abstract class Controller {
 					}
 				}
 			}
-		} catch (Exception e) {
-			// TODO: handle exception
+		} catch (Exception err) {
+			Debug.log(err,"Controller.initFormValueOnPost");
 		}
 
 	}

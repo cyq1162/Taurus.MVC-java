@@ -139,7 +139,8 @@ public class ConvertTool {
 		}
 		try {
 			return new SimpleDateFormat(formatter).parse(strValue);
-		} catch (Exception e) {
+		} catch (Exception err) {
+			Debug.log(err,"ConvertTool.toDate("+strValue+")");
 			return getMinDate();
 		}
 		
@@ -195,6 +196,7 @@ public class ConvertTool {
 		try {
 			return (T)changeType(value, t);
 		} catch (Exception e) {
+			Debug.log(e,"ConvertTool.tryChangeType("+value+")");
 			return null;
 		}
 	}

@@ -5,6 +5,7 @@ import java.util.Collection;
 
 import taurus.mvc.Controller;
 import taurus.mvc.annotation.IgnoreDefaultController;
+import taurus.mvc.annotation.Require;
 import taurus.mvc.http.HttpPart;
 
 /**
@@ -13,11 +14,11 @@ import taurus.mvc.http.HttpPart;
  * @author 123
  *
  */
-@IgnoreDefaultController
+//@IgnoreDefaultController
 public class FileController extends Controller {
 
 
-	
+	@Require(paraName="myFile")
 	public void upload(HttpPart myFile) throws IOException {
 		
 		if(myFile!=null)

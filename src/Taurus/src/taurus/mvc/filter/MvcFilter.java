@@ -138,16 +138,23 @@ public class MvcFilter {
 		}
 		if(ControllerCollector.initController())
 		{
-			context.log("Taurus.MVC State : Starting.");
+			context.log("Taurus.MVC V"+getVersion()+" State : Starting.");
 		}
 		else
 		{
-			context.log("Taurus.MVC State : Stopped.");
+			context.log("Taurus.MVC V"+getVersion()+" State : Stopped.");
 		}
 		if(!string.IsNullOrEmpty(MsConfig.getAppRunUrl()))
 		{
 			Run.start(MsConfig.getAppRunUrl());//主动启动。
 		}
 		context.log("Taurus.Mvc Filter.initConfig() End.");
+	}
+	/**
+	 * 获取当前版本号。
+	 * @return
+	 */
+	private static String getVersion() {
+		return Run.class.getPackage().getImplementationVersion();
 	}
 }
