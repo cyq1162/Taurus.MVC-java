@@ -4,8 +4,8 @@ Taurus.mvc-java is a high-performance mvc and webapi framework for java web（�
 
 框架说明：<hr />
 1、框架兼容Tocat9及之前的javax.servlet系列和tomcat10的jakarta.servlet系列。<br/>
-2、Taurus Mvc 功能将在3.N系列出来。<br/>
-3、Taurus.MVC-java 2.N 版本 拥有WebAPI和微服务客户端两个功能.<br/>
+2、Taurus Mvc-java Web Mvc 功能将在3.N系列出来。<br/>
+3、Taurus.MVC-java 2.N 版本 拥有WebAPI和微服务客户端两个功能：<br/>
 【Java微服务客户端需搭配DotNet版本微服务【服务端 - 注册中心】使用】<br/>
 
 <hr /><br/>
