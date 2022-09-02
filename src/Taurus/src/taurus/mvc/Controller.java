@@ -33,8 +33,8 @@ public abstract class Controller {
 
 	private Map<String, String> keyValueForPost;
 	private StringBuilder apiResult = new StringBuilder();
-	HttpRequest request;
-	HttpResponse response;
+	protected HttpRequest request;
+	protected HttpResponse response;
 
 	public void ProcessRequest(HttpRequest request, HttpResponse response) throws IOException {
 		this.request = request;
@@ -378,16 +378,6 @@ public abstract class Controller {
 	public void setQuery(String name, String value) {
 		// TODO Auto-generated method stub
 
-	}
-
-	public HttpRequest getRequest() {
-		// TODO Auto-generated method stub
-		return this.request;
-	}
-
-	public HttpResponse getResponse() {
-		// TODO Auto-generated method stub
-		return this.response;
 	}
 
 	public Boolean getIsHttpGet() {

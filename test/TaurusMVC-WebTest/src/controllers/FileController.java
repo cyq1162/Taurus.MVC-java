@@ -14,7 +14,7 @@ import taurus.mvc.http.HttpPart;
  * @author 123
  *
  */
-//@IgnoreDefaultController
+@IgnoreDefaultController
 public class FileController extends Controller {
 
 
@@ -27,16 +27,16 @@ public class FileController extends Controller {
 		}
 		else
 		{
-			write("request content-type : "+getRequest().getContentType()+"<br/>");
+			write("request content-type : "+request.getContentType()+"<br/>");
 			write("make sure tomcat server.xml £ºContext docBase=... allowCasualMultipartParsing=\"true\"/><br/>");
 			write("make sure Content-Type: multipart/form-data<br/>");
 			
 		}
-		if(getRequest().getParameter("name")!=null)
+		if(request.getParameter("name")!=null)
 		{
-			write("get name from request.getParameter : " + getRequest().getParameter("name") + "<br/>");
+			write("get name from request.getParameter : " + request.getParameter("name") + "<br/>");
 		}
-		Collection<HttpPart> parts = getRequest().getParts();
+		Collection<HttpPart> parts = request.getParts();
 		if (parts != null) {
 			for (HttpPart part : parts) {
 				write("get fileName from request.getParts : " + part.getName() + "<br/>");

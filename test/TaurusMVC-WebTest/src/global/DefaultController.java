@@ -23,9 +23,9 @@ public class DefaultController extends Controller {
 	}
 	public void second(String value) {
 		write("exe second method : value="+value+".<br/>");
-		write("OldQueryString:"+getRequest().getAttribute(MvcConst.OldQueryString)+"<br/>");
-		write("OldUri :"+getRequest().getAttribute(MvcConst.OldUri)+"<br/>");
-		write("OldUrl :"+getRequest().getAttribute(MvcConst.OldUrl)+"<br/>");
+		write("OldQueryString:"+request.getAttribute(MvcConst.OldQueryString)+"<br/>");
+		write("OldUri :"+request.getAttribute(MvcConst.OldUri)+"<br/>");
+		write("OldUrl :"+request.getAttribute(MvcConst.OldUrl)+"<br/>");
 	}
 	@Ack
 	@Token

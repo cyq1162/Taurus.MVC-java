@@ -16,14 +16,14 @@ public class TestController extends Controller {
 	}
 	@Override
 	public void Default() {
-		Enumeration<String> names=getRequest().getHeaderNames();
+		Enumeration<String> names=request.getHeaderNames();
 		while (names.hasMoreElements()) {
 			String string = (String) names.nextElement();
-			write(string+" : "+getRequest().getHeader(string)+"<br />");
+			write(string+" : "+request.getHeader(string)+"<br />");
 			
 		}
-		String aa=getRequest().getParameter("aa");
-		String bb=getRequest().getParameter("bb");
+		String aa=request.getParameter("aa");
+		String bb=request.getParameter("bb");
 		String name=query("bb");
 		write("hello Default"+aa+","+bb+","+name);
 	}
@@ -33,10 +33,10 @@ public class TestController extends Controller {
 	@HttpPost
 	@HttpGet
 	public void gogo() {
-	Enumeration<String> names=getRequest().getHeaderNames();
+	Enumeration<String> names=request.getHeaderNames();
 	while (names.hasMoreElements()) {
 		String string = (String) names.nextElement();
-		write(string+" : "+getRequest().getHeader(string)+"<br />");
+		write(string+" : "+request.getHeader(string)+"<br />");
 		
 	}
 		
