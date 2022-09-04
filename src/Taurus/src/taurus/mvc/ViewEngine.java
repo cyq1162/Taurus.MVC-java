@@ -21,18 +21,23 @@ public class ViewEngine {
 		if (hasJspOrHtml == 0) {
 			return;
 		}
-		String filePath = "";
+		String modulePath = "";
 		if (!string.IsNullOrEmpty(controller.getModuleName())) {
-			filePath += controller.getModuleName().toLowerCase() + "/";
+			modulePath = controller.getModuleName().toLowerCase() + "/";
 		}
-		filePath += controller.getControllerName().toLowerCase() + "/" + controller.getMethodName().toLowerCase();
+		String	controllerPath = controller.getControllerName().toLowerCase() + "/" + controller.getMethodName().toLowerCase();
 
-		String path = "/WEB-INF/jsp/" + filePath + ".jsp";
+		String path = "/WEB-INF/jsp/" + modulePath+controllerPath + ".jsp";
 		if (!new File(realPath + path).exists()) {
-			path = realPath + "/WEB-INF/html/" + filePath + ".html";
+			
+			if(modulePath.equals("")){
+				return;
+			}
+			path= "/WEB-INF/jsp/" + controllerPath + ".jsp";
 			if (!new java.io.File(realPath + path).exists()) {
 				return;
 			}
+			
 		}
 		String html = controller.request.getRequestDispatcher(path).include(controller.request, controller.response);
 		controller.write(html);
