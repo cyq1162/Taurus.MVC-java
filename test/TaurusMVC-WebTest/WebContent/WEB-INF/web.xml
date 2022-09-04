@@ -4,5 +4,10 @@
 
 <web-app>
   <display-name>Archetype Created Web Application</display-name>
+  <context-param>
+  	<param-name>Mvc.DefaultUrl</param-name>
+  	<param-value>/home/index</param-value>
+  	<description>指定默认起始页</description>
+  </context-param>
 
 </web-app>

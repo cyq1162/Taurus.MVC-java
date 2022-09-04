@@ -32,9 +32,9 @@ import taurus.mvc.tool.string;
 public abstract class Controller {
 
 	private Map<String, String> keyValueForPost;
-	private StringBuilder apiResult = new StringBuilder();
-	protected HttpRequest request;
-	protected HttpResponse response;
+	public StringBuilder outputString = new StringBuilder();
+	public HttpRequest request;
+	public HttpResponse response;
 
 	public void ProcessRequest(HttpRequest request, HttpResponse response) throws IOException {
 		this.request = request;
@@ -59,6 +59,7 @@ public abstract class Controller {
 			if (checkMethodAnnotatedLimit(methodInfo)) {
 				if (exeBeforeInvoke(methodInfo.getAnnotationInfo().getHasIgnoreDefaultController())) {
 					if (exeMethodInvoke(methodInfo)) {
+						ViewEngine.Load(this);
 						exeEndInvoke(methodInfo.getAnnotationInfo().getHasIgnoreDefaultController());
 					}
 				}
@@ -125,7 +126,10 @@ public abstract class Controller {
 			break;
 		}
 		_MethodName = methodName;
-
+		if(string.IsNullOrEmpty(_MethodName))
+		{
+			_MethodName="default";
+		}
 		if (items.length > paraStartIndex) {
 			_ParaItems = new String[items.length - paraStartIndex];
 			for (int i = 0; i < _ParaItems.length; i++) {
@@ -349,30 +353,26 @@ public abstract class Controller {
 	}
 
 	private void writeExeResult() throws Exception {
-		if (apiResult.length() > 0) {
+		if (outputString.length() > 0) {
 			String encode = getEncoding();
-			String outResult = apiResult.toString();
+			String outResult = outputString.toString();
 			String contentType = response.getContentType();
 			if (contentType == null || contentType.length() == 0) {
 				contentType = "text/html;charset=" + encode;
 				response.setContentType(contentType);
 			}
 			if (contentType.startsWith("text/html")) {
-				if (apiResult.charAt(0) == '{' && apiResult.charAt(apiResult.length() - 1) == '}') {
+				if (outputString.charAt(0) == '{' && outputString.charAt(outputString.length() - 1) == '}') {
 					response.setContentType("application/json;charset=" + encode);
-				} else if (outResult.startsWith("<?xml") && apiResult.charAt(apiResult.length() - 1) == '>') {
+				} else if (outResult.startsWith("<?xml") && outputString.charAt(outputString.length() - 1) == '>') {
 					response.setContentType("application/xml;charset=" + encode);
 				}
 			}
 
 			response.getWriter().write(outResult);
 			outResult = null;
-			apiResult = null;
+			outputString = null;
 		}
-	}
-
-	public String getApiResult() {
-		return apiResult.toString();
 	}
 
 	public void setQuery(String name, String value) {
@@ -442,20 +442,16 @@ public abstract class Controller {
 	}
 
 	public void write(String msg) {
-		apiResult.append(msg);
+		outputString.append(msg);
 
 	}
 	public void write(byte[] buf) throws IOException {
 		response.getOutputStream().write(buf);
 
 	}
-	public void write(char[] buf) throws IOException {
-		response.getWriter().write(buf);
-
-	}
 	public void write(String msg, Boolean isSuccess) {
 		String json = "{\"success\":" + (isSuccess ? "true" : "false") + ",\"msg\":\"" + msg + "\"}";
-		apiResult.append(json);
+		outputString.append(json);
 	}
 
 	public Boolean beforeInvoke(String methodName) {

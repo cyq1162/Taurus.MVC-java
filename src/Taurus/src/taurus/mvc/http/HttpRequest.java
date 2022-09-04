@@ -11,31 +11,38 @@ import java.util.Map;
 
 public class HttpRequest {
 
+	Object getServletRequest() {
+		if(javaxRequest!=null)
+		{
+			return javaxRequest;
+		}
+		return jakartaRequest;
+	}
 	javax.servlet.http.HttpServletRequest javaxRequest;
 	jakarta.servlet.http.HttpServletRequest jakartaRequest;
 	public HttpRequest(jakarta.servlet.http.HttpServletRequest request) {
 		this.jakartaRequest=request;
-		if(request.getCharacterEncoding()==null)
-		{
-			try {
-				request.setCharacterEncoding("utf-8");
-			} catch (UnsupportedEncodingException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
+//		if(request.getCharacterEncoding()==null)
+//		{
+//			try {
+//				request.setCharacterEncoding("utf-8");
+//			} catch (UnsupportedEncodingException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//		}
 	}
 
 	public HttpRequest(javax.servlet.http.HttpServletRequest request) {
 		this.javaxRequest = request;
-		if (request.getCharacterEncoding() == null) {
-			try {
-				request.setCharacterEncoding("utf-8");
-			} catch (UnsupportedEncodingException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
+//		if (request.getCharacterEncoding() == null) {
+//			try {
+//				request.setCharacterEncoding("utf-8");
+//			} catch (UnsupportedEncodingException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//		}
 	}
 
 	private HttpContext _HttpContext;
@@ -325,7 +332,13 @@ public class HttpRequest {
 		}
 		return jakartaRequest.getContextPath();
 	}
-	
+	public String getRealPath(String arg0) {
+		if(javaxRequest!=null)
+		{
+			return javaxRequest.getServletContext().getRealPath(arg0);
+		}
+		return jakartaRequest.getServletContext().getRealPath(arg0);
+	}
 	public HttpCookie[] getCookies() {
 		if(javaxRequest!=null)
 		{
@@ -391,6 +404,7 @@ public class HttpRequest {
 				{
 					return new HttpPart(javaxRequest.getPart(arg0));
 				}
+				return null;
 			}
 			if(jakartaRequest.getPart(arg0)!=null)
 			{
@@ -487,7 +501,14 @@ public class HttpRequest {
 		}
 		return jakartaRequest.getServletPath();
 	}
-	
+	public HttpRequestDispatcher getRequestDispatcher(String arg0) {
+		if(javaxRequest!=null)
+		{
+			return new HttpRequestDispatcher(javaxRequest.getRequestDispatcher(arg0));
+		}
+		return new HttpRequestDispatcher(jakartaRequest.getRequestDispatcher(arg0));
+	}
+
 	private HttpSession _Session;
 	public HttpSession getSession() {
 		if (_Session == null) {

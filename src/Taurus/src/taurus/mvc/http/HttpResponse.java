@@ -7,13 +7,23 @@ import java.util.Locale;
 
 public class HttpResponse{
 
+	Object getServletResponse() {
+		if(javaxResponse!=null)
+		{
+			return javaxResponse;
+		}
+		return jakartaResponse;
+	}
 	jakarta.servlet.http.HttpServletResponse jakartaResponse;
 	javax.servlet.http.HttpServletResponse javaxResponse;
+	HttpIncludeResponse includeResponse;
 	public HttpResponse(jakarta.servlet.http.HttpServletResponse response) {
 		this.jakartaResponse=response;
+		includeResponse=new HttpIncludeResponse(response);
 	}
 	public HttpResponse(javax.servlet.http.HttpServletResponse response) {
 		this.javaxResponse=response;
+		includeResponse=new HttpIncludeResponse(response);
 	}
 	
 	public void flushBuffer() throws IOException {

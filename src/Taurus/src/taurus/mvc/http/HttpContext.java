@@ -241,8 +241,8 @@ public class HttpContext {
 	}
 	public void log(String arg0) {
 		if (javaxContext != null) {
-			javaxContext.log(arg0);return;
+			javaxContext.log("-----------------"+arg0);return;
 		}
-		jakartaContext.log(arg0);
+		jakartaContext.log("-----------------"+arg0);
 	}
 }

@@ -66,4 +66,11 @@ public class MvcConfig {
 	public static String getControllerJarNames() {
 		return keyValue.get(MvcConst.MvcControllerJarNames);
 	}
+	/**
+	 * 指定页面起始访问路径
+	 * @return 
+	 */
+	public static String getDefaultUrl() {
+		return keyValue.get(MvcConst.MvcDefaultUrl);
+	}
 }

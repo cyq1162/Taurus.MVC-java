@@ -1,5 +1,6 @@
 package taurus.mvc.filter;
 
+import java.lang.reflect.Field;
 import java.net.URI;
 import java.util.Enumeration;
 
@@ -11,11 +12,12 @@ import taurus.mvc.http.HttpContext;
 import taurus.mvc.http.HttpRequest;
 import taurus.mvc.http.HttpResponse;
 import taurus.mvc.reflect.ControllerCollector;
+import taurus.mvc.tool.Debug;
 import taurus.mvc.tool.string;
 
 public class MvcFilter {
 
-	public static void doFilter(HttpRequest request, HttpResponse response) {
+	public static void start(HttpRequest request, HttpResponse response) {
 		String urlAbs = request.getRequestURL().toString();
 		String urlPath = request.getRequestURI();
 		String host = urlAbs.substring(0, urlAbs.length() - urlPath.length());
@@ -56,15 +58,28 @@ public class MvcFilter {
 				return true;
 			}
 		} catch (Exception err) {
-			WriteError(err.getMessage(), response);
+			Debug.log(err, "MvcFilter.isCORSUrl");
 		}
 
 		return false;
 	}
-	private static void invokeClass(HttpRequest request, HttpResponse response)
-    {
-        Class<?> t = null;
-        //ViewController是由页面的前两个路径决定了。
+
+	private static void invokeClass(HttpRequest request, HttpResponse response) {
+		try {
+			Class<?> t = getClass(request);
+			if (t == null) {
+				response.getWriter().write("You need a controller for coding!");
+			}
+			else {
+				Controller o = (Controller) t.newInstance();// 实例化
+				o.ProcessRequest(request, response);
+			}
+		} catch (Exception err) {
+			Debug.log(err, "MvcFilter.invokeClass");
+		}
+    }
+	private static Class<?> getClass(HttpRequest request) {
+		 //ViewController是由页面的前两个路径决定了。
         String localPath=request.getRequestURI();
         if(localPath.startsWith("/"))
         {
@@ -80,41 +95,8 @@ public class MvcFilter {
         {
             className = items.length > 1 ? items[0] + "." + items[1] : items[0];
         }
-        t = ControllerCollector.getController(className);
-        if (t == null || t.getName() == "DefaultController")
-        {
-//            if (MicroService.Run.Proxy(context, false))//客户端做为网关。
-//            {
-//                return;
-//            }
-        }
-        if (t == null)
-        {
-            WriteError("You need a " + className + " controller for coding!", response);
-        }
-        else
-        {
-            try
-            {
-                Controller o =(Controller)t.newInstance();//实例化
-                o.ProcessRequest(request,response);
-            }
-            catch (Exception err)
-            {
-                WriteError(err.getMessage(), response);
-            }
-        }
-        //context.Response.End();
-    }
-	private static void WriteError(String tip, HttpResponse response)
-     {
-		 try {
-			 response.getWriter().write(tip);
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
-		
-     }
+        return ControllerCollector.getController(className);
+	}
 	/**
 	 * 环境（Tomcat）启动时初始化执行1次。
 	 * @param context
@@ -148,7 +130,44 @@ public class MvcFilter {
 		{
 			Run.start(MsConfig.getAppRunUrl());//主动启动。
 		}
+		context.log("Path : "+context.getRealPath("/"));
 		context.log("Taurus.Mvc Filter.initConfig() End.");
+	}
+	static void initMultipartParsing(Object filterConfig)
+	{
+		try {
+			Field field=filterConfig.getClass().getDeclaredField("context");
+			if(field!=null)
+			{
+				field.setAccessible(true);
+				Object object=field.get(filterConfig);
+				if(object!=null)
+				{
+					field=object.getClass().getDeclaredField("allowCasualMultipartParsing");
+					if(field!=null)
+					{
+						field.setAccessible(true);
+						field.set(object,true);
+					}
+				}
+				
+			}
+		} catch (Exception e) {
+
+		} 
+	}
+	static void initEncoding(HttpContext context)
+	{
+		if(context.getResponseCharacterEncoding()==null || context.getResponseCharacterEncoding().equals("ISO-8859-1"))
+		{
+			context.setResponseCharacterEncoding("utf-8");
+		}
+		if(context.getRequestCharacterEncoding()==null || context.getRequestCharacterEncoding().equals("ISO-8859-1"))
+		{
+			context.setRequestCharacterEncoding("utf-8");
+		}
+		context.log("RequestEncoding  init : "+context.getRequestCharacterEncoding());
+		context.log("ResponseEncoding init : "+context.getResponseCharacterEncoding());
 	}
 	/**
 	 * 获取当前版本号。

@@ -28,7 +28,6 @@ public class FileController extends Controller {
 		else
 		{
 			write("request content-type : "+request.getContentType()+"<br/>");
-			write("make sure tomcat server.xml £ºContext docBase=... allowCasualMultipartParsing=\"true\"/><br/>");
 			write("make sure Content-Type: multipart/form-data<br/>");
 			
 		}

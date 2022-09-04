@@ -1,7 +1,6 @@
 package taurus.mvc.filter;
 
 import java.io.IOException;
-
 import javax.servlet.DispatcherType;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -9,11 +8,11 @@ import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import taurus.mvc.config.MvcConfig;
 import taurus.mvc.config.MvcConst;
 import taurus.mvc.entity.MethodInfo;
 import taurus.mvc.http.HttpContext;
@@ -23,8 +22,7 @@ import taurus.mvc.reflect.ControllerCollector;
 import taurus.mvc.reflect.MethodCollector;
 import taurus.mvc.tool.string;
 
-@WebFilter(value="*",dispatcherTypes={DispatcherType.REQUEST,DispatcherType.FORWARD} )
-@MultipartConfig
+@WebFilter(value="*",dispatcherTypes={DispatcherType.REQUEST,DispatcherType.FORWARD,DispatcherType.INCLUDE} )
 public class MvcFilterForJavax implements Filter {
 
 	@Override
@@ -32,10 +30,18 @@ public class MvcFilterForJavax implements Filter {
 			throws IOException, ServletException {
 		HttpServletRequest request=(HttpServletRequest)arg0;
 		HttpServletResponse response=(HttpServletResponse)arg1;
-		if(request.getRequestURI().contains(".") || !ControllerCollector.getHasController())
+		if(request.getRequestURI().contains(".") || !ControllerCollector.getHasController() || request.getAttribute("IsDispatcherInclude")!=null)
 		{
 			arg2.doFilter(arg0, arg1);
 			return;
+		}
+		if(request.getRequestURI().equals("/"))
+		{
+			String defaultUrl=MvcConfig.getDefaultUrl();
+			if (!string.IsNullOrEmpty(defaultUrl)) {
+				arg0.getRequestDispatcher(defaultUrl).forward(arg0, arg1);
+				return;
+			}
 		}
 		MethodInfo methodInfo = MethodCollector.getGlobalRouteMapInvoke();
 		if (methodInfo != null) {
@@ -53,11 +59,14 @@ public class MvcFilterForJavax implements Filter {
 				// TODO: handle exception
 			}
 		}
-		MvcFilter.doFilter(new HttpRequest(request), new HttpResponse(response));
+		MvcFilter.start(new HttpRequest(request), new HttpResponse(response));
 	}
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {
 		Filter.super.init(filterConfig);
-		MvcFilter.initConfig(new HttpContext(filterConfig.getServletContext()));
+		MvcFilter.initMultipartParsing(filterConfig);
+		HttpContext httpContext=new HttpContext(filterConfig.getServletContext());
+		MvcFilter.initEncoding(httpContext);
+		MvcFilter.initConfig(httpContext);
 	}
 }
