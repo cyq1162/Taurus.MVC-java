@@ -14,12 +14,6 @@ public class HttpCookie {
 	public void setValue(String value) {
 		Value = value;
 	}
-	public String getComment() {
-		return Comment;
-	}
-	public void setComment(String comment) {
-		Comment = comment;
-	}
 	public String getDomain() {
 		return Domain;
 	}
@@ -50,43 +44,31 @@ public class HttpCookie {
 	public void setSecure(boolean isSecure) {
 		this.isSecure  = isSecure;
 	}
-	public int getVersion() {
-		return Version;
-	}
-	public void setVersion(int version) {
-		Version = version;
-	}
 	String Name;
 	String Value;
-	String Comment;
 	String Domain;
 	String Path;
 	boolean isHttpOnly;
 	int MaxAge;
 	boolean isSecure;
-	int Version;
 	
 	HttpCookie(javax.servlet.http.Cookie cookie) {
 		this.setName(cookie.getName());
 		this.setValue(cookie.getValue());
-		this.setComment(cookie.getComment());
 		this.setDomain(cookie.getDomain());
 		this.setHttpOnly(cookie.isHttpOnly());
 		this.setMaxAge(cookie.getMaxAge());
 		this.setPath(cookie.getPath());
 		this.setSecure(cookie.getSecure());
-		this.setVersion(cookie.getVersion());
 	}
 	HttpCookie(jakarta.servlet.http.Cookie cookie) {
 		this.setName(cookie.getName());
 		this.setValue(cookie.getValue());
-		this.setComment(cookie.getComment());
 		this.setDomain(cookie.getDomain());
 		this.setHttpOnly(cookie.isHttpOnly());
 		this.setMaxAge(cookie.getMaxAge());
 		this.setPath(cookie.getPath());
 		this.setSecure(cookie.getSecure());
-		this.setVersion(cookie.getVersion());
 	}
 
 	public HttpCookie(String name, String value) {
@@ -117,23 +99,19 @@ public class HttpCookie {
 	static jakarta.servlet.http.Cookie toJakartaCookie(HttpCookie arg0) {
 		jakarta.servlet.http.Cookie cookie=new jakarta.servlet.http.Cookie(arg0.getName(), arg0.getValue());
 		cookie.setDomain(arg0.getDomain());
-		cookie.setComment(arg0.getComment());
 		cookie.setHttpOnly(arg0.isHttpOnly());
 		cookie.setMaxAge(arg0.getMaxAge());
 		cookie.setPath(arg0.getPath());
 		cookie.setSecure(arg0.isSecure());
-		cookie.setVersion(arg0.getVersion());
 		return cookie;
 	}
 	static javax.servlet.http.Cookie toJavaxCookie(HttpCookie arg0) {
 		javax.servlet.http.Cookie cookie=new javax.servlet.http.Cookie(arg0.getName(), arg0.getValue());
 		cookie.setDomain(arg0.getDomain());
-		cookie.setComment(arg0.getComment());
 		cookie.setHttpOnly(arg0.isHttpOnly());
 		cookie.setMaxAge(arg0.getMaxAge());
 		cookie.setPath(arg0.getPath());
 		cookie.setSecure(arg0.isSecure());
-		cookie.setVersion(arg0.getVersion());
 		return cookie;
 	}
 }

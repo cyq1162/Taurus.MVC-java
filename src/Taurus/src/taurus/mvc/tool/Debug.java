@@ -28,7 +28,7 @@ public class Debug {
 		}
 		log(sb.toString());
 	}
-	private static void log(String mString) {
+	public static void log(String mString) {
 		HttpContext.Current.log(mString);
 	}
 }

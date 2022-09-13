@@ -63,10 +63,11 @@ public class MvcFilterForJavax implements Filter {
 	}
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {
-		Filter.super.init(filterConfig);
 		MvcFilter.initMultipartParsing(filterConfig);
-		HttpContext httpContext=new HttpContext(filterConfig.getServletContext());
-		MvcFilter.initEncoding(httpContext);
-		MvcFilter.initConfig(httpContext);
+		MvcFilter.initConfig(new HttpContext(filterConfig.getServletContext()));
+	}
+	@Override
+	public void destroy() {
+		
 	}
 }

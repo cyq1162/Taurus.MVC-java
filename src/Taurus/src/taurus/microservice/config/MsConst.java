@@ -9,5 +9,5 @@ public class MsConst {
 	/**
 	 * 微服务间发送的请求头 microservice = MicroService.getClientKey()
 	 */
-	public final static String MicroServiceHeaderKey="microservice";
+	public final static String MicroServiceHeaderKey="mskey";
 }

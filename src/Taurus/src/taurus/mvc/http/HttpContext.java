@@ -9,6 +9,7 @@ import java.util.Set;
 
 public class HttpContext {
 
+	public static Boolean IsDestroyed=false;
 	public static HttpContext Current;
 	
 	public javax.servlet.ServletContext javaxContext;
@@ -121,12 +122,12 @@ public class HttpContext {
 	}
 
 	
-	public String getRequestCharacterEncoding() {
-		if (javaxContext != null) {
-			return javaxContext.getRequestCharacterEncoding();
-		}
-		return jakartaContext.getRequestCharacterEncoding();
-	}
+//	public String getRequestCharacterEncoding() {
+//		if (javaxContext != null) {
+//			return javaxContext.getRequestCharacterEncoding();
+//		}
+//		return jakartaContext.getRequestCharacterEncoding();
+//	}
 
 	
 	public URL getResource(String arg0) throws MalformedURLException {
@@ -153,12 +154,12 @@ public class HttpContext {
 	}
 
 	
-	public String getResponseCharacterEncoding() {
-		if (javaxContext != null) {
-			return javaxContext.getResponseCharacterEncoding();
-		}
-		return jakartaContext.getResponseCharacterEncoding();
-	}
+//	public String getResponseCharacterEncoding() {
+//		if (javaxContext != null) {
+//			return javaxContext.getResponseCharacterEncoding();
+//		}
+//		return jakartaContext.getResponseCharacterEncoding();
+//	}
 
 	
 	public String getServerInfo() {
@@ -175,13 +176,13 @@ public class HttpContext {
 		}
 		return jakartaContext.getServletContextName();
 	}
-
-	public int getSessionTimeout() {
-		if (javaxContext != null) {
-			return javaxContext.getSessionTimeout();
-		}
-		return jakartaContext.getSessionTimeout();
-	}
+//
+//	public int getSessionTimeout() {
+//		if (javaxContext != null) {
+//			return javaxContext.getSessionTimeout();
+//		}
+//		return jakartaContext.getSessionTimeout();
+//	}
 
 	
 	public String getVirtualServerName() {
@@ -216,29 +217,29 @@ public class HttpContext {
 		return jakartaContext.setInitParameter(arg0, arg1);
 	}
 	
-	public void setRequestCharacterEncoding(String arg0) {
-		if (javaxContext != null) {
-			javaxContext.setRequestCharacterEncoding(arg0);return;
-		}
-		jakartaContext.setRequestCharacterEncoding(arg0);
-		
-	}
-
-	
-	public void setResponseCharacterEncoding(String arg0) {
-		if (javaxContext != null) {
-			javaxContext.setResponseCharacterEncoding(arg0);return;
-		}
-		jakartaContext.setResponseCharacterEncoding(arg0);
-		
-	}
-
-	public void setSessionTimeout(int arg0) {
-		if (javaxContext != null) {
-			javaxContext.setSessionTimeout(arg0);return;
-		}
-		jakartaContext.setSessionTimeout(arg0);
-	}
+//	public void setRequestCharacterEncoding(String arg0) {
+//		if (javaxContext != null) {
+//			javaxContext.setRequestCharacterEncoding(arg0);return;
+//		}
+//		jakartaContext.setRequestCharacterEncoding(arg0);
+//		
+//	}
+//
+//	
+//	public void setResponseCharacterEncoding(String arg0) {
+//		if (javaxContext != null) {
+//			javaxContext.setResponseCharacterEncoding(arg0);return;
+//		}
+//		jakartaContext.setResponseCharacterEncoding(arg0);
+//		
+//	}
+//
+//	public void setSessionTimeout(int arg0) {
+//		if (javaxContext != null) {
+//			javaxContext.setSessionTimeout(arg0);return;
+//		}
+//		jakartaContext.setSessionTimeout(arg0);
+//	}
 	public void log(String arg0) {
 		if (javaxContext != null) {
 			javaxContext.log("-----------------"+arg0);return;

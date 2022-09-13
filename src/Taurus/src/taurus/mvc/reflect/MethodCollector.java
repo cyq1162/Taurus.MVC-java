@@ -31,7 +31,7 @@ public class MethodCollector {
 			lock.lock();
 			try {
 				if (!typeMethods.containsKey(t.getName())) {
-					AddMethodInfo(t);
+					addMethodInfo(t);
 				}
 			} finally {
 				lock.unlock();
@@ -42,7 +42,7 @@ public class MethodCollector {
     
     
 
-	static void AddMethodInfo(Class<?> t) {
+	static void addMethodInfo(Class<?> t) {
 
 		Boolean hasToken = t.isAnnotationPresent(Token.class);
 		Boolean hasAck = t.isAnnotationPresent(Ack.class);
@@ -65,6 +65,7 @@ public class MethodCollector {
 					continue;
 				}
 			}
+			if(dic.containsKey(name)){continue;}
 			AnnotationInfo anno = new AnnotationInfo();
 			anno.setHasToken(hasToken || method.isAnnotationPresent(Token.class));
 			anno.setHasAck(hasAck || method.isAnnotationPresent(Ack.class));

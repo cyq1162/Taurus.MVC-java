@@ -24,6 +24,7 @@ public class MvcFilter {
 		Run.start(host);// 被动启动。
 
 		if (checkCORS(request, response)) {
+			initEncoding(request, response);
 			invokeClass(request, response);
 		}
 	}
@@ -156,18 +157,16 @@ public class MvcFilter {
 
 		} 
 	}
-	static void initEncoding(HttpContext context)
+	static void initEncoding(HttpRequest request, HttpResponse response)
 	{
-		if(context.getResponseCharacterEncoding()==null || context.getResponseCharacterEncoding().equals("ISO-8859-1"))
+		if(response.getCharacterEncoding()==null || response.getCharacterEncoding().equals("ISO-8859-1"))
 		{
-			context.setResponseCharacterEncoding("utf-8");
+			response.setCharacterEncoding("utf-8");
 		}
-		if(context.getRequestCharacterEncoding()==null || context.getRequestCharacterEncoding().equals("ISO-8859-1"))
+		if(request.getCharacterEncoding()==null || request.getCharacterEncoding().equals("ISO-8859-1"))
 		{
-			context.setRequestCharacterEncoding("utf-8");
+			request.setCharacterEncoding("utf-8");
 		}
-		context.log("RequestEncoding  init : "+context.getRequestCharacterEncoding());
-		context.log("ResponseEncoding init : "+context.getResponseCharacterEncoding());
 	}
 	/**
 	 * 获取当前版本号。

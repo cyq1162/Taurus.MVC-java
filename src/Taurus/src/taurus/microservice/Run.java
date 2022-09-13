@@ -7,6 +7,7 @@ import java.util.Random;
 import taurus.microservice.config.MsConfig;
 import taurus.microservice.config.MsConst;
 import taurus.mvc.http.HttpContext;
+import taurus.mvc.tool.Debug;
 import taurus.mvc.tool.string;
 
 /**
@@ -31,15 +32,22 @@ public class Run {
                  new Thread(new Runnable() {
 					public void run() {
 						Random random=new Random();
+						Debug.log("MicroService.Run.start.Thread.Runnable : Start");
 						 while (true)
 			                {
 			                    try
 			                    {
+			                    	if(HttpContext.IsDestroyed)
+			                    	{
+			                    		Debug.log("MicroService.Run.start.Thread.Runnable : Stoped");
+			                    		break;
+			                    	}
 			                        AfterRegHost(RegHost());
 			                        Thread.sleep(5000+random.nextInt(5000));//5-10秒循环1次。
 			                    }
 			                    catch (Exception err)
 			                    {
+			                    	Debug.log(err,"Run.start.Thread.Runnable");
 			                    	try
 			                    	{
 			                    		Thread.sleep(5000+random.nextInt(5000));//5-10秒循环1次。

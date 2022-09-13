@@ -26,7 +26,7 @@ import taurus.mvc.tool.string;
  * 核心控制器基类：所有的控制器都应该继承自此基类 允许子类被二次或三次继承。
  * 
  * @author 路过秋天 ：教程博客：https://www.cnblogs.com/cyq1162
- * 					  开源地址：https://github.com/cyq1162/Taurus.MVC-java
+ *         开源地址：https://github.com/cyq1162/Taurus.MVC-java
  *
  */
 public abstract class Controller {
@@ -66,10 +66,9 @@ public abstract class Controller {
 			}
 			writeExeResult();
 		} catch (Exception err) {
-			Debug.log(err,"Controller.ProcessRequest");
-			if(err instanceof InvocationTargetException)
-			{
-				 err=(Exception)err.getCause();
+			Debug.log(err, "Controller.ProcessRequest");
+			if (err instanceof InvocationTargetException) {
+				err = (Exception) err.getCause();
 			}
 			try {
 				request.getContext().log(err.getMessage());
@@ -82,7 +81,7 @@ public abstract class Controller {
 				}
 
 			} catch (Exception e) {
-				Debug.log(e,"MethodCollector.getGlobalOnError");
+				Debug.log(e, "MethodCollector.getGlobalOnError");
 			}
 		}
 
@@ -106,8 +105,7 @@ public abstract class Controller {
 		case 1:
 			if (items.length > 1) {
 				if (items.length > 2 && items[0].toLowerCase() != _ControllerName
-						&& items[1].toLowerCase() == _ControllerName
-						&& items[0] == MsConfig.getClientName()) {
+						&& items[1].toLowerCase() == _ControllerName && items[0] == MsConfig.getClientName()) {
 					paraStartIndex++;
 					methodName = items[2];// 往后兼容一格。
 				} else {
@@ -126,9 +124,8 @@ public abstract class Controller {
 			break;
 		}
 		_MethodName = methodName;
-		if(string.IsNullOrEmpty(_MethodName))
-		{
-			_MethodName="default";
+		if (string.IsNullOrEmpty(_MethodName)) {
+			_MethodName = "default";
 		}
 		if (items.length > paraStartIndex) {
 			_ParaItems = new String[items.length - paraStartIndex];
@@ -154,11 +151,11 @@ public abstract class Controller {
 		{
 			MethodInfo checkAck = MethodCollector.getMethod(_ControllerType, "checkAck", false);
 			if (checkAck != null) {
-				isGoOn = (Boolean) checkAck.getMethod().invoke(this);
-			} else if(!attrFlags.getHasIgnoreDefaultController()) {
+				isGoOn = (Boolean) checkAck.getMethod().invoke(this, new Object[] { query("ack") });
+			} else if (!attrFlags.getHasIgnoreDefaultController()) {
 				checkAck = MethodCollector.getGlobalCheckAck();
 				if (checkAck != null) {
-					isGoOn = (Boolean) checkAck.getMethod().invoke(null, new Object[] { this });
+					isGoOn = (Boolean) checkAck.getMethod().invoke(null, new Object[] { this, query("ack") });
 				}
 			}
 			if (!isGoOn) {
@@ -170,11 +167,11 @@ public abstract class Controller {
 		{
 			MethodInfo checkToken = MethodCollector.getMethod(_ControllerType, "checkToken", false);
 			if (checkToken != null) {
-				isGoOn = (Boolean) (checkToken.getMethod().invoke(this));
-			} else  if(!attrFlags.getHasIgnoreDefaultController()){
+				isGoOn = (Boolean) (checkToken.getMethod().invoke(this, new Object[] { query("token") }));
+			} else if (!attrFlags.getHasIgnoreDefaultController()) {
 				checkToken = MethodCollector.getGlobalCheckToken();
 				if (checkToken != null) {
-					isGoOn = (Boolean) checkToken.getMethod().invoke(null, new Object[] { this });
+					isGoOn = (Boolean) checkToken.getMethod().invoke(null, new Object[] { this, query("token") });
 				}
 			}
 			if (!isGoOn) {
@@ -189,13 +186,13 @@ public abstract class Controller {
 			if (!attrFlags.getHasIgnoreDefaultController()) {
 				microServiceInfo = MethodCollector.getGlobalCheckMicroService();
 				if (microServiceInfo != null) {
-					isGoOn = (Boolean) microServiceInfo.getMethod().invoke(null, new Object[] { this });
+					isGoOn = (Boolean) microServiceInfo.getMethod().invoke(null, new Object[] { this, query("mskey") });
 				}
 			}
-			if(isGoOn && microServiceInfo==null) {
+			if (isGoOn && microServiceInfo == null) {
 				microServiceInfo = MethodCollector.getMethod(_ControllerType, "checkMicroService", false);
 				if (microServiceInfo != null) {
-					isGoOn = (Boolean) microServiceInfo.getMethod().invoke(this);
+					isGoOn = (Boolean) microServiceInfo.getMethod().invoke(this, new Object[] { query("mskey") });
 				}
 			}
 			if (!isGoOn) {
@@ -238,7 +235,7 @@ public abstract class Controller {
 		if (isGoOn) {
 			methodInfo = MethodCollector.getMethod(_ControllerType, "beforeInvoke", false);
 			if (methodInfo != null) {
-				isGoOn = (Boolean) methodInfo.getMethod().invoke(this, new Object[] { _MethodName });
+				isGoOn = (Boolean) methodInfo.getMethod().invoke(this);
 			}
 		}
 		return isGoOn;
@@ -247,7 +244,7 @@ public abstract class Controller {
 	private void exeEndInvoke(boolean isIgnoreGlobal) throws Exception {
 		MethodInfo methodInfo = MethodCollector.getMethod(_ControllerType, "endInvoke", false);
 		if (methodInfo != null) {
-			methodInfo.getMethod().invoke(this, new Object[] { _MethodName });
+			methodInfo.getMethod().invoke(this);
 		}
 		if (!isIgnoreGlobal) {
 			methodInfo = MethodCollector.getGlobalEndInvoke();
@@ -445,20 +442,22 @@ public abstract class Controller {
 		outputString.append(msg);
 
 	}
+
 	public void write(byte[] buf) throws IOException {
 		response.getOutputStream().write(buf);
 
 	}
+
 	public void write(String msg, Boolean isSuccess) {
 		String json = "{\"success\":" + (isSuccess ? "true" : "false") + ",\"msg\":\"" + msg + "\"}";
 		outputString.append(json);
 	}
 
-	public Boolean beforeInvoke(String methodName) {
+	public Boolean beforeInvoke() {
 		return true;
 	}
 
-	public void endInvoke(String methodName) {
+	public void endInvoke() {
 
 	}
 	// region override
@@ -473,7 +472,7 @@ public abstract class Controller {
 	/// <para>检测身份是否通过</para>
 	/// </summary>
 	/// <returns></returns>
-	public Boolean checkToken() {
+	public Boolean checkToken(String token) {
 		return true;
 	}
 
@@ -482,7 +481,7 @@ public abstract class Controller {
 	/// <para>检测请求是否合法</para>
 	/// </summary>
 	/// <returns></returns>
-	public Boolean checkAck() {
+	public Boolean checkAck(String ack) {
 		return true;
 	}
 
@@ -491,7 +490,7 @@ public abstract class Controller {
 	/// <para>检测微服务间的请求是否合法</para>
 	/// </summary>
 	/// <returns></returns>
-	public Boolean checkMicroService() {
+	public Boolean checkMicroService(String msKey) {
 		return true;
 		// return MicroService.Config.ServerKey ==
 		// Context.Request.Headers[MicroService.Const.HeaderKey];
@@ -511,13 +510,10 @@ public abstract class Controller {
 					if (keyValueForPost.containsKey(key.toLowerCase())) {
 						value = keyValueForPost.get(key.toLowerCase());
 					}
-				}
-				else
-				{
-					HttpPart part=request.getPart(key);
-					if(part!=null)
-					{
-						value=part.getSubmittedFileName();
+				} else {
+					HttpPart part = request.getPart(key);
+					if (part != null) {
+						value = part.getSubmittedFileName();
 					}
 				}
 			}
@@ -558,7 +554,7 @@ public abstract class Controller {
 				}
 			}
 		} catch (Exception err) {
-			Debug.log(err,"Controller.initFormValueOnPost");
+			Debug.log(err, "Controller.initFormValueOnPost");
 		}
 
 	}

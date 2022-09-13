@@ -2,7 +2,6 @@ package taurus.mvc.http;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.security.Principal;
 import java.util.Collection;
 import java.util.Enumeration;
@@ -297,16 +296,17 @@ public class HttpRequest {
 		
 	}
 	
-	public void setCharacterEncoding(String arg0) throws UnsupportedEncodingException {
-		if(javaxRequest!=null)
-		{
-			javaxRequest.setCharacterEncoding(arg0);
+	public void setCharacterEncoding(String arg0) {
+		try {
+
+			if (javaxRequest != null) {
+				javaxRequest.setCharacterEncoding(arg0);
+			} else {
+				jakartaRequest.setCharacterEncoding(arg0);
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
 		}
-		else
-		{
-			jakartaRequest.setCharacterEncoding(arg0);
-		}
-		
 	}
 	
 	public String changeSessionId() {
