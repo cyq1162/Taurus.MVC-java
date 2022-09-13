@@ -10,4 +10,16 @@
   	<description>指定默认起始页</description>
   </context-param>
 
+    <context-param>
+  	<param-name>MicroService.Client.Name</param-name>
+  	<param-value>*</param-value>
+  </context-param>
+      <context-param>
+  	<param-name>MicroService.Client.RegUrl</param-name>
+  	<param-value>http://localhost:8000</param-value>
+  </context-param>
+        <context-param>
+  	<param-name>MicroService.App.RunUrl</param-name>
+  	<param-value>http://localhost:8010</param-value>
+  </context-param>
 </web-app>

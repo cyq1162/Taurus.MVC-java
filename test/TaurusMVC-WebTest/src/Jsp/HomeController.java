@@ -19,8 +19,8 @@ public class HomeController extends Controller {
 		request.setAttribute("list", list);
 	}
 	@Override 
-	public void endInvoke(String methodName) {
-		if(methodName.equals("index"))
+	public void endInvoke() {
+		if(getMethodName().equals("index"))
 		{
 			//后期修改html输出内容。
 			String html=outputString.toString();

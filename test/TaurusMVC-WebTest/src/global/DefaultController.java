@@ -47,10 +47,10 @@ public class DefaultController extends Controller {
      * @param controller
      * @return
      */
-	public static Boolean checkAck(Controller controller)
+	public static Boolean checkAck(Controller controller,String ack)
     {
-        controller.write("Global : checkAck :"+ controller.query("ack")+"<br/>");
-        return controller.query("ack")!=null;
+        controller.write("Global : checkAck :"+ ack+"<br/>");
+        return ack!=null;
 
     }
 
@@ -59,10 +59,10 @@ public class DefaultController extends Controller {
      * @param controller
      * @return
      */
-    public static Boolean checkToken(Controller controller)
+    public static Boolean checkToken(Controller controller,String token)
     {
-    	controller.write("Global : checkToken "+ controller.query("token")+"<br/>");
-    	 return controller.query("token")!=null;
+    	controller.write("Global : checkToken "+ token+"<br/>");
+    	 return token!=null;
     }
 
     /**
@@ -70,10 +70,10 @@ public class DefaultController extends Controller {
      * @param controller
      * @return
      */
-    public static Boolean checkMicroService(Controller controller)
+    public static Boolean checkMicroService(Controller controller,String msKey)
     {
-    	controller.write("Global : checkMicroService "+ controller.query("microservice")+"<br/>");
-    	 return controller.query("microservice")!=null;
+    	controller.write("Global : checkMicroService "+ msKey+"<br/>");
+    	 return msKey!=null;
     }
 
     /**

@@ -13,13 +13,13 @@ public class OverrideBeforeEndInvoke extends Controller {
 	}
 	
 	@Override
-	public Boolean beforeInvoke(String methodName) {
+	public Boolean beforeInvoke() {
 		write("call @Override beforeInvoke：返回随机true or false，可多次刷新访问。<br/>");
 		return new Random().nextBoolean();
 	}
 
 	@Override
-	public void endInvoke(String methodName) {
+	public void endInvoke() {
 		write("call @Override endInvoke<br/>");
 	}
 
