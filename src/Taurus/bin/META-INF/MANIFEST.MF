@@ -1,4 +1,4 @@
-Manifest-Version: 2.0
+Manifest-Version: 3.0
 Class-Path: 
 Implementation-Title: taurus.mvc
-Implementation-Version: 3.0.1
+Implementation-Version: 3.0.4

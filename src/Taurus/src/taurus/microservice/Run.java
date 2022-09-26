@@ -111,6 +111,7 @@ public class Run {
 			{
 				conn.disconnect();
 			}
+			conn=null;
 		}
 		return stringBuffer.toString();
 	}

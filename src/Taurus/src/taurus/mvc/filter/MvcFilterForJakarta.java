@@ -67,4 +67,8 @@ public class MvcFilterForJakarta implements Filter {
 		MvcFilter.initMultipartParsing(filterConfig);
 		MvcFilter.initConfig(new HttpContext(filterConfig.getServletContext()));
 	}
+	@Override
+	public void destroy() {
+		HttpContext.Current.log("MvcFilterForJakarta Destroyed!");
+	}
 }

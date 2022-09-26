@@ -558,4 +558,11 @@ public abstract class Controller {
 		}
 
 	}
+	
+	public void destroy() {
+		keyValueForPost=null;
+		outputString=null;
+		request=null;
+		response=null;
+	}
 }

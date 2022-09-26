@@ -68,6 +68,6 @@ public class MvcFilterForJavax implements Filter {
 	}
 	@Override
 	public void destroy() {
-		
+		HttpContext.Current.log("MvcFilterForJavax Destroyed!");
 	}
 }

@@ -27,6 +27,8 @@ public class MvcFilter {
 			initEncoding(request, response);
 			invokeClass(request, response);
 		}
+		request=null;
+		response=null;
 	}
 
 	private static Boolean checkCORS(HttpRequest request, HttpResponse response)
@@ -74,6 +76,8 @@ public class MvcFilter {
 			else {
 				Controller o = (Controller) t.newInstance();// สตภýปฏ
 				o.ProcessRequest(request, response);
+				o.destroy();
+				o=null;
 			}
 		} catch (Exception err) {
 			Debug.log(err, "MvcFilter.invokeClass");
@@ -133,6 +137,7 @@ public class MvcFilter {
 		}
 		context.log("Path : "+context.getRealPath("/"));
 		context.log("Taurus.Mvc Filter.initConfig() End.");
+		System.gc();
 	}
 	static void initMultipartParsing(Object filterConfig)
 	{

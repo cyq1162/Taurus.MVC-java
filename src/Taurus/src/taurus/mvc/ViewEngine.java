@@ -3,7 +3,7 @@ import java.io.File;
 
 import taurus.mvc.tool.string;
 
-public class ViewEngine {
+class ViewEngine {
 
 	private static int hasJspOrHtml=-1;
 	public static void Load(Controller controller) throws Exception {
