@@ -15,7 +15,7 @@ import taurus.mvc.reflect.ControllerCollector;
 import taurus.mvc.tool.Debug;
 import taurus.mvc.tool.string;
 
-public class MvcFilter {
+class MvcFilter {
 
 	public static void start(HttpRequest request, HttpResponse response) {
 		String urlAbs = request.getRequestURL().toString();

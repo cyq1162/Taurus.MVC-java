@@ -1,11 +1,13 @@
 package taurus.microservice;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 import taurus.microservice.config.MsConfig;
 import taurus.mvc.tool.string;
 
-public class Client {
+class Client {
 	
     /**
      * 当前程序是否作为客务端运行：微服务应用程序
@@ -41,15 +43,18 @@ public class Client {
 		return _Host2;
 
     }
-    static HashMap<string, HostInfo[]> _HostList;
+	public static void setHost2(String value) {
+		_Host2=value;
+	}
+    static HashMap<String, HostInfo[]> _HostList;
     /// <summary>
     /// 从微服务主程序端获取的微服务列表【用于微服务间内部调用运转】
     /// </summary>
-    public static HashMap<string, HostInfo[]> getHostList()
+    public static HashMap<String, HostInfo[]> getHostList()
     {
        
-            if (_HostList == null)
-            {
+//            if (_HostList == null)
+//            {
 //                string json = IO.Read(MicroService.Const.ClientHostListJsonPath);
 //                if (!string.IsNullOrEmpty(json))
 //                {
@@ -57,9 +62,9 @@ public class Client {
 //                }
                 if (_HostList == null)
                 {
-                    _HostList = new HashMap<string, HostInfo[]>();
+                    _HostList = new HashMap<String, HostInfo[]>();
                 }
-            }
+//            }
             return _HostList;
       
     }
@@ -71,27 +76,27 @@ public class Client {
     /// <returns></returns>
     public static String getHost(String name)
     {
-//        HostInfo[] infoList = getHostList(name);
-//        if (infoList != null && infoList.length() > 0)
-//        {
-//            HostInfo firstInfo = infoList[0];
-//            for (int i = 0; i < infoList.Count; i++)
-//            {
-//                int callIndex = firstInfo.CallIndex + i;
-//                if (callIndex >= infoList.size())
-//                {
-//                    callIndex = 0;
-//                }
-//                HostInfo info = infoList[callIndex];
-//
-//                if (info.Version < 0)//正常5-10秒注册1次。
-//                {
-//                    continue;//已经断开服务的。
-//                }
-//                firstInfo.CallIndex = callIndex + 1;//指向下一个。
-//                return infoList[callIndex].Host;
-//            }
-//        }
+        HostInfo[] infoList = getHostList(name);
+        if (infoList != null && infoList.length > 0)
+        {
+            HostInfo firstInfo = infoList[0];
+            for (int i = 0; i < infoList.length; i++)
+            {
+                int callIndex = firstInfo.CallIndex + i;
+                if (callIndex >= infoList.length)
+                {
+                    callIndex = 0;
+                }
+                HostInfo info = infoList[callIndex];
+
+                if (info.Version < 0)//正常5-10秒注册1次。
+                {
+                    continue;//已经断开服务的。
+                }
+                firstInfo.CallIndex = callIndex + 1;//指向下一个。
+                return infoList[callIndex].Host;
+            }
+        }
         return "";
     }
     /// <summary>
@@ -101,43 +106,45 @@ public class Client {
     /// <returns></returns>
     public static HostInfo[] getHostList(String name)
     {
-//        if (!string.IsNullOrEmpty(name))
-//        {
-//            List<HostInfo> list = new List<HostInfo>();
-//            if (HostList.ContainsKey(name))//微服务程序。
-//            {
-//                list.AddRange(HostList[name]);
-//            }
-//            if (name.Contains("."))//域名
-//            {
-//                if (name != "*.*" && HostList.ContainsKey("*.*"))
-//                {
-//                    List<HostInfo> commList = HostList["*.*"];
-//                    if (commList.Count > 0)
-//                    {
-//                        if (list.Count == 0 || commList[0].Version >= list[0].Version)//版本号比较处理
-//                        {
-//                            list.AddRange(commList);//增加“*.*”模块的通用符号处理。
-//                        }
-//                    }
-//                }
-//            }
-//            else //普通模块
-//            {
-//                if (name != "*" && HostList.ContainsKey("*"))
-//                {
-//                    List<HostInfo> commList = HostList["*"];
-//                    if (commList.Count > 0)
-//                    {
-//                        if (list.Count == 0 || commList[0].Version >= list[0].Version)//版本号比较处理
-//                        {
-//                            list.AddRange(commList);//增加“*”模块的通用符号处理。
-//                        }
-//                    }
-//                }
-//            }
-//            return list;
-//        }
+        if (!string.IsNullOrEmpty(name))
+        {
+            ArrayList<HostInfo> list = new ArrayList<HostInfo>();
+            
+            HashMap<String, HostInfo[]> hostList=getHostList();
+            if (hostList.containsKey(name))//微服务程序。
+            {
+                list.addAll(Arrays.asList(hostList.get(name)));
+            }
+            if (name.contains("."))//域名
+            {
+                if (!name.equals("*.*") && hostList.containsKey("*.*"))
+                {
+                    HostInfo[] commList = hostList.get("*.*");
+                    if (commList.length > 0)
+                    {
+                        if (list.size() == 0 || commList[0].Version >= list.get(0).Version)//版本号比较处理
+                        {
+                            list.addAll(Arrays.asList(commList));//增加“*.*”模块的通用符号处理。
+                        }
+                    }
+                }
+            }
+            else //普通模块
+            {
+                if (!name.equals("*") && hostList.containsKey("*"))
+                {
+                    HostInfo[] commList = hostList.get("*");
+                    if (commList.length > 0)
+                    {
+                        if (list.size() == 0 || commList[0].Version >= list.get(0).Version)//版本号比较处理
+                        {
+                            list.addAll(Arrays.asList(commList));//增加“*”模块的通用符号处理。
+                        }
+                    }
+                }
+            }
+            return list.toArray(new HostInfo[list.size()]);
+        }
         return null;
     }
 }

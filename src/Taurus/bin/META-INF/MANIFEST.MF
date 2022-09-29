@@ -1,4 +1,4 @@
 Manifest-Version: 3.0
 Class-Path: 
 Implementation-Title: taurus.mvc
-Implementation-Version: 3.0.4
+Implementation-Version: 3.0.5

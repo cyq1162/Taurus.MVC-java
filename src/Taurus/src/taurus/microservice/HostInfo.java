@@ -2,7 +2,7 @@ package taurus.microservice;
 
 import java.util.Date;
 
-public class HostInfo {
+class HostInfo {
 	 /// <summary>
     /// Ö÷»úµØÖ·£ºhttp://localhost:8080
     /// </summary>

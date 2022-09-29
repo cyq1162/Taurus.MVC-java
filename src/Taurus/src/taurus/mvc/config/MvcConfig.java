@@ -42,7 +42,7 @@ public class MvcConfig {
 	 * @return 默认：true
 	 */
 	public static Boolean getIsAllowCORS() {
-		return ConvertTool.tryChangeType(keyValue.get(MvcConst.MvcIsAllowCORS), boolean.class) ;
+		return ConvertTool.tryChangeType(keyValue.get(MvcConst.IsAllowCORS), boolean.class) ;
 	}
 	/**
 	 * 路由模式：配置项：mvc.routemode
@@ -52,7 +52,7 @@ public class MvcConfig {
 	 * @return 默认：1
 	 */
 	public static Integer getRouteMode() {
-		String routeMode=keyValue.get(MvcConst.MvcRouteMode);
+		String routeMode=keyValue.get(MvcConst.RouteMode);
 		if(routeMode==null){return 1;}
 		return ConvertTool.tryChangeType(routeMode, Integer.class) ;
 	}
@@ -64,13 +64,13 @@ public class MvcConfig {
 	 * @return 
 	 */
 	public static String getControllerJarNames() {
-		return keyValue.get(MvcConst.MvcControllerJarNames);
+		return keyValue.get(MvcConst.ControllerJarNames);
 	}
 	/**
 	 * 指定页面起始访问路径
 	 * @return 
 	 */
 	public static String getDefaultUrl() {
-		return keyValue.get(MvcConst.MvcDefaultUrl);
+		return keyValue.get(MvcConst.DefaultUrl);
 	}
 }

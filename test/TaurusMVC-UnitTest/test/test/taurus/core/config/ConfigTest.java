@@ -13,16 +13,16 @@ public class ConfigTest {
 
 	@Test
 	public void testMvcConfig() {
-		MvcConfig.set(MvcConst.MvcRouteMode, "2");
+		MvcConfig.set(MvcConst.RouteMode, "2");
 		assertTrue(2==MvcConfig.getRouteMode());
-		MvcConfig.set(MvcConst.MvcIsAllowCORS, "false");
+		MvcConfig.set(MvcConst.IsAllowCORS, "false");
 		assertTrue(!MvcConfig.getIsAllowCORS());
-		MvcConfig.set(MvcConst.MvcControllerJarNames, "*");
+		MvcConfig.set(MvcConst.ControllerJarNames, "*");
 		assertTrue("*".equals(MvcConfig.getControllerJarNames()));
 	}
 	@Test
 	public void testMicroServiceConfig() {
-		MsConfig.set(MsConst.MicroServiceClientKey, "2");
+		MsConfig.set(MsConst.ClientKey, "2");
 		String key=MsConfig.getClientKey();
 		assertTrue("2".equals(key));
 	}

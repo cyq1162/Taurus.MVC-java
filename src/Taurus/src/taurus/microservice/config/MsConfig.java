@@ -40,7 +40,7 @@ public class MsConfig {
 	 */
 	
 	public static String getClientKey() {
-		String key=keyValue.get(MsConst.MicroServiceClientKey);
+		String key=keyValue.get(MsConst.ClientKey);
 		if(key==null){return "Taurus.MicroService";}
 		return key;
 	}
@@ -51,7 +51,7 @@ public class MsConfig {
 	 * @return
 	 */
 	public static String getClientName() {
-		return keyValue.get(MsConst.MicroServiceClientName);
+		return keyValue.get(MsConst.ClientName);
 	}
 
 	/**
@@ -59,7 +59,7 @@ public class MsConfig {
 	 * @return
 	 */
 	public static String getClientRegUrl() {
-		return keyValue.get(MsConst.MicroServiceClientRegUrl);
+		return keyValue.get(MsConst.ClientRegUrl);
 	}
 
 	/**
@@ -67,7 +67,7 @@ public class MsConfig {
 	 * @return
 	 */
 	public static Integer getClientVersion() {
-		return ConvertTool.tryChangeType(keyValue.get(MsConst.MicroServiceClientVersion),Integer.class);
+		return ConvertTool.tryChangeType(keyValue.get(MsConst.ClientVersion),Integer.class);
 	}
 
 	/**
@@ -75,6 +75,6 @@ public class MsConfig {
 	 * @return
 	 */
 	public static String getAppRunUrl() {
-		return keyValue.get(MsConst.MicroServiceAppRunUrl);
+		return keyValue.get(MsConst.AppRunUrl);
 	}
 }
